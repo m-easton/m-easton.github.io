@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "Matty Easton",
+    "section": "",
+    "text": "You can access my Google Scholar Profile here (last updated May 2026).\nYou can access my resume here (last updated May 2026).\nYou can access my academic cirriculum vitae here (last updated August 2021)."
+  },
+  {
+    "objectID": "resume.html#resume-materials",
+    "href": "resume.html#resume-materials",
+    "title": "Matty Easton",
+    "section": "",
+    "text": "You can access my Google Scholar Profile here (last updated May 2026).\nYou can access my resume here (last updated May 2026).\nYou can access my academic cirriculum vitae here (last updated August 2021)."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Matty Easton",
+    "section": "",
+    "text": "My name is Matty, and I’m a Political Science PhD Candidate in the UC Berkeley Department of Political Science. I am a fellow for both the Center for the Study of American Democracy (CSAD) the Jack Citrin Center for Public Opinion Research.\nMy research focuses on the political persuasiveness of the “manosphere”, a loosely-connected online network of male-focused influencers and entertainers. I am particularly interested in how this ecosystem influences young male political behavior.\nBroadly, I study the intersection of political behavior, public opinion, and political entertainment in American Politics. My I have experience in large-n data, statistical regression, field experiments, survey research, and LLM text analysis. I also work as a part-time research assistant in the public opinion and political messaging arena. My research has been published in Proceedings of the National Academy of Sciences (PNAS) and the Journal of Experimental Political Science (JEPS).\nPrior to graduate studies at UC Berkeley, I received a B.A. from Brigham Young University in Political Science with a minor in Professional Writing and Rhetoric, where I graduated as the department’s valedictorian."
+  },
+  {
+    "objectID": "index.html#welcome-to-my-site",
+    "href": "index.html#welcome-to-my-site",
+    "title": "Matty Easton",
+    "section": "",
+    "text": "My name is Matty, and I’m a Political Science PhD Candidate in the UC Berkeley Department of Political Science. I am a fellow for both the Center for the Study of American Democracy (CSAD) the Jack Citrin Center for Public Opinion Research.\nMy research focuses on the political persuasiveness of the “manosphere”, a loosely-connected online network of male-focused influencers and entertainers. I am particularly interested in how this ecosystem influences young male political behavior.\nBroadly, I study the intersection of political behavior, public opinion, and political entertainment in American Politics. My I have experience in large-n data, statistical regression, field experiments, survey research, and LLM text analysis. I also work as a part-time research assistant in the public opinion and political messaging arena. My research has been published in Proceedings of the National Academy of Sciences (PNAS) and the Journal of Experimental Political Science (JEPS).\nPrior to graduate studies at UC Berkeley, I received a B.A. from Brigham Young University in Political Science with a minor in Professional Writing and Rhetoric, where I graduated as the department’s valedictorian."
+  },
+  {
+    "objectID": "index.html#published-papers",
+    "href": "index.html#published-papers",
+    "title": "Matty Easton",
+    "section": "Published Papers",
+    "text": "Published Papers\nPolitical Practitioners Poorly Predict Which Messages Persuade the Public\n2024. David Broockman, Joshua Kalla, Christian Caballero, and Matthew Easton. Proceedings of the National Academy of Sciences. PDF\n\n\n\n\n\n\nNoteAbstract (click to expand)\n\n\n\n\n\nDo political practitioners have good intuitions about how to persuade the public? Longstanding theories that political elites’ messages have large effects on public opinion and the large sums spent to secure some practitioners’ messaging advice suggest they should. However, findings regarding the surprising limits of expert forecasts in other domains suggest they may not. In this paper, we evaluate how well political practitioners can predict which messages are most persuasive. We measured the effects of messages about 21 political issues using a large-sample survey experiment ( respondent-message observations). We then asked both political practitioners ( practitioners, predictions) and laypeople ( respondents, predictions) to predict the efficacy of these messages. The practitioners we surveyed ranged widely in their experience and expertise with persuasive message design. We find that: (a) political practitioners and laypeople both performed barely better than chance at predicting persuasive effects; (b) once accounting for laypeople’s inflated expectations about the average size of effects, practitioners did not predict meaningfully better than laypeople; (c) these results held even for self-identified issue experts and highly experienced practitioners; and (d) practitioners’ experience, expertise, information environment, and demographics did not meaningfully explain variation in their accuracy. Our findings have theoretical implications for understanding the conditions likely to produce meaningful elite influence on public opinion as well as practical implications for practitioners.\n\n\n\nThe Democracy of Dating: How Political Affiliations Shape Relationship Formation\n2021. Matthew Easton and John Holbein. Journal of Experimental Political Science. PDF\n\n\n\n\n\n\nNoteAbstract (click to expand)\n\n\n\n\n\nHow much does politics affect relationship building? Previous experimental studies have come to vastly different conclusions – ranging from null to truly transformative effects. To explore these differences, this study replicates and extends previous research by conducting five survey experiments meant to expand our understanding of how politics does/does not shape the formation of romantic relationships. We find that people, indeed, are influenced by the politics of prospective partners; respondents evaluate those in the political out-group as being less attractive, less dateable, and less worthy of matchmaking efforts. However, these effects are modest in size – falling almost exactly in between previous study estimates. Our results shine light on a literature that has, up until this point, produced a chasm in study results – a vital task given concerns over growing levels of partisan animus in the USA and the rapidly expanding body of research on affective polarization."
+  },
+  {
+    "objectID": "index.html#working-papers",
+    "href": "index.html#working-papers",
+    "title": "Matty Easton",
+    "section": "Working Papers",
+    "text": "Working Papers\nThe Politics of the Mainstream Manosphere: Evidence from 2024 Male Influencer Podcasts\nMay 2026. Matthew Easton. Working Paper.\n\n\n\n\n\n\nNoteAbstract (click to expand)\n\n\n\n\n\nWhat is the “mainstream manosphere” and how does it talk about politics? Using iterative computational text analysis, this paper offers an empirically grounded framework for understanding mainstream male-oriented media as a distinct political communication environment. Drawing on a corpus of 5,504 transcripts from 53 podcasts spanning January through November 6, 2024, I apply TF-IDF cosine clustering and dictionary-based keyword analysis to characterize the internal structure of this media ecosystem and its engagement with political discourse. Three descriptive principal findings emerge. First, the mainstream manosphere is internally heterogeneous, clustering into six content communities with meaningfully different thematic profiles. Second, manosphere shows discuss politics substantially more than gender-balanced entertainment media but substantially less than explicitly political programming, consistent with a mechanism of ambient political socialization rather than direct mobilization. Third, within the manosphere, these six clusters engage with both political and traditional manosphere vocabulary at statistically distinct rates, such that future research should treat sub-communities within this space as analytically separate rather than as a unified actor.\n\n\n\nSwiping Right: How Dating Difficulty Influences Young Male Political Identity\nDec 2025. Matthew Easton. Working Paper.\n\n\n\n\n\n\nNoteAbstract (click to expand)\n\n\n\n\n\nWhat is contributing to the recent rightward political shift among young men, both in the US and abroad? This paper investigates how difficulty on the dating market affects young male political ideology, identity, and behavior. Using descriptive trends from the General Social Survey and longitudinal analysis from the British Election Study, I find that men who stay single are more likely to shift to the political right, particularly among Gen Z men. However, relationship status is less influential on ideology and voting behavior, suggesting that while successful romantic relationships may play a part in male conservatism, it is not an all-powerful driver. Finally, I propose a survey experiment to test my hypotheses in a US-context.\n\n\n\nIs Ignorance Bliss?: The Relationship of Political Position Knowledge and Affective Polarization\nMay 2025. Matthew Easton. Working Paper.\n\n\n\n\n\n\nNoteAbstract (click to expand)\n\n\n\n\n\nWhat is the relationship between political knowledge and affective polarization? While scholars have long focused on the potential impacts of affective polarization on social and political outcomes, less research has been devoted to understanding what is driving up partisan animus in the first place. Using time-series ANES public opinion data from 1972 to 2016, I find that an increase in correct political knowledge leads to a statistically significant 15.758 percentage point increase in affective polarization. However, knowledge alone does not account for the change in affective polarization over time. When interacted with policy agreement with the in-party, affective polarization does remain consistent among the most knowledgeable respondents across time. As the category of knowledgeable and policy-agreed Americans is on the rise, this suggests that the driving force behind affective polarization is likely both an increase in overall knowledge combined with the growth in partisan sorting among the electorate."
+  },
+  {
+    "objectID": "index.html#student-publications",
+    "href": "index.html#student-publications",
+    "title": "Matty Easton",
+    "section": "Student Publications",
+    "text": "Student Publications\nThe Democracy of Dating: A Survey Experiment on American Dating Preferences\n2019. Matthew Easton. Sigma: Journal of Political and International Studies. PDF\nRational Fear: The Effects of Terrorist Activity and Immigration on Attitudes toward Security in the European Union\n2019. Matthew Easton and Connor Kreutz. Sigma: Journal of Political and International Studies. PDF"
+  }
+]
