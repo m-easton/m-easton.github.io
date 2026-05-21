@@ -1,0 +1,30 @@
+
+---
+title: "Matty Easton"
+about:
+  template: trestles
+  image: headshot.jpeg
+  links:
+    - icon: envelope
+      #text: Email
+      href: mailto:matt_easton@berkeley.edu
+    - icon: github
+      #text: GitHub
+      href: https://github.com/m-easton
+    - icon: linkedin
+      #text: LinkedIn
+      href: https://www.linkedin.com/in/matthew-easton
+    - icon: twitter-x
+      #text: X
+      href: https://x.com/easton_matty
+---
+
+## Resume Materials
+
+You can access my [*Google Scholar Profile* here](https://scholar.google.com/citations?user=qV-8zlQAAAAJ&hl=en) *(last updated May 2026)*.
+
+You can access my [resume here](files/2026 Resume.pdf) *(last updated May 2026)*.
+
+You can access my academic [cirriculum vitae here](files/2021 CV.pdf) *(last updated August 2021)*.
+
+
