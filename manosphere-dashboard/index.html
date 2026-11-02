@@ -16,6 +16,7 @@
   --line: #dde0e7; --accent: #1f5fbf; --accent-soft: #e6eefb;
   --c-all: #1f5fbf; --c-other: #1f5fbf; --c-trump: #c62828; --c-political: #2e8b57; --c-control: #8c8c8c;
   --hi: #e6eefb; --hi-ink: #174a99; --lo: #fbeee2; --lo-ink: #8a4a10;
+  --s-gaines: #c4661f; --s-other: #1f5fbf; --s-one: #1f5fbf;
   --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
   --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -24,12 +25,12 @@
   --bg: #111317; --surface: #191c21; --surface-2: #22262d; --ink: #e8eaee; --ink-2: #b2b7c2; --ink-3: #8a909c;
   --line: #2e333c; --accent: #6b9be6; --accent-soft: #1d2a40;
   --c-all: #5b8fe0; --c-other: #5b8fe0; --c-trump: #e2574f; --c-political: #3fae74; --c-control: #9aa0a8;
-  --hi: #1d2a40; --hi-ink: #a9c4f1; --lo: #3a2a1a; --lo-ink: #f0c08a; color-scheme: dark; } }
+  --hi: #1d2a40; --hi-ink: #a9c4f1; --lo: #3a2a1a; --lo-ink: #f0c08a; --s-gaines: #c9762a; --s-other: #5b8fe0; --s-one: #5b8fe0; color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #111317; --surface: #191c21; --surface-2: #22262d; --ink: #e8eaee; --ink-2: #b2b7c2; --ink-3: #8a909c;
   --line: #2e333c; --accent: #6b9be6; --accent-soft: #1d2a40;
   --c-all: #5b8fe0; --c-other: #5b8fe0; --c-trump: #e2574f; --c-political: #3fae74; --c-control: #9aa0a8;
-  --hi: #1d2a40; --hi-ink: #a9c4f1; --lo: #3a2a1a; --lo-ink: #f0c08a; color-scheme: dark; }
+  --hi: #1d2a40; --hi-ink: #a9c4f1; --lo: #3a2a1a; --lo-ink: #f0c08a; --s-gaines: #c9762a; --s-other: #5b8fe0; --s-one: #5b8fe0; color-scheme: dark; }
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
 .wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
@@ -45,13 +46,14 @@ p { margin: 0; }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
 .sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
 /* lexicon tabs */
-.lextabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+.lextabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
 .lextab { text-align: left; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 12px 14px; cursor: pointer; font: inherit; display: grid; gap: 2px; }
 .lextab b { font-family: var(--f-display); font-size: 19px; font-weight: 600; }
 .lextab small { color: var(--ink-2); font-size: 13px; }
 .lextab[aria-selected="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--accent-soft); }
 .lextab:focus-visible, .subtab:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-@media (max-width: 900px) { .lextabs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 1000px) { .lextabs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .lextabs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 460px) { .lextabs { grid-template-columns: 1fr; } }
 .tag { display: inline-block; font-size: 11px; color: var(--ink-3); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-left: 6px; font-weight: 400; vertical-align: 1px; }
 .words { font-size: 12.5px; color: var(--ink-2); }
@@ -121,6 +123,55 @@ input[type="search"], select { font: inherit; font-size: 14px; padding: 6px 10px
 a { color: var(--accent); }
 .loading { color: var(--ink-3); padding: 30px 0; }
 footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); }
+/* pilot-only */
+.lp-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; counter-reset: step; }
+@media (max-width: 980px) { .lp-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .lp-steps { grid-template-columns: 1fr; } }
+.lp-step { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 6px; align-content: start; }
+.lp-step .num { font-family: var(--f-mono); font-size: 12px; color: var(--accent); }
+.lp-step b { font-size: 14.5px; }
+.lp-step p { font-size: 13.5px; color: var(--ink-2); }
+.lp-samples { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 700px) { .lp-samples { grid-template-columns: 1fr; } }
+.lp-sample { border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 6px; background: var(--surface); }
+.lp-sample .big { font-family: var(--f-mono); font-size: 26px; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.lp-sample .q { font-family: var(--f-display); font-size: 17px; font-weight: 600; }
+.lp-ind { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.lp-indcard { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 6px; background: var(--surface); align-content: start; }
+.lp-indcard .name { font-weight: 600; }
+.lp-indcard code { font-family: var(--f-mono); font-size: 12px; color: var(--ink-3); }
+.lp-indcard .def { font-size: 13.5px; }
+.lp-indcard .rel { font-size: 12px; color: var(--ink-3); }
+.lp-stance { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; font-size: 13.5px; align-items: baseline; }
+@media (max-width: 520px) { .lp-stance { grid-template-columns: 1fr; gap: 2px; } .lp-stance dd { margin-bottom: 8px; } }
+.lp-stance dt { margin: 0; } .lp-stance dd { margin: 0; color: var(--ink-2); }
+pre.lp-prompt { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: var(--f-mono); font-size: 12.5px; line-height: 1.55; background: var(--surface-2); border-radius: 8px; padding: 14px; max-height: 520px; overflow: auto; }
+details > summary { cursor: pointer; padding: 12px 14px; font-weight: 600; font-size: 14px; }
+details > div { padding: 0 14px 14px; display: grid; gap: 10px; }
+.lp-st { display: inline-flex; align-items: center; border-radius: 999px; padding: 1px 9px; font-size: 12px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; }
+.lp-st.supportive { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.lp-st.critical { border-color: var(--ink-2); color: var(--ink); font-weight: 600; }
+.lp-st.mixed { background: var(--lo); border-color: var(--lo); color: var(--lo-ink); font-weight: 600; }
+.lp-st.absent { color: var(--ink-3); border-style: dashed; }
+.lp-input { display: grid; gap: 8px; font-size: 14px; }
+.lp-input .ctx { color: var(--ink-3); font-size: 13px; }
+.lp-input .lbl { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; color: var(--ink-3); text-transform: uppercase; }
+.lp-input .core { border-left: 3px solid var(--accent); padding-left: 10px; }
+.lp-ex { display: grid; gap: 10px; }
+.lp-exitem { border-left: 3px solid var(--line); padding: 4px 0 4px 12px; display: grid; gap: 4px; }
+.lp-exitem.supportive { border-left-color: var(--accent); }
+.lp-exitem .quote { font-family: var(--f-display); font-size: 17px; line-height: 1.4; }
+.lp-exitem .meta { font-size: 12px; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.lp-exitem .why { font-size: 13px; color: var(--ink-2); }
+.lp-takeaways { display: grid; gap: 12px; }
+.lp-take { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; }
+.lp-take .n { font-family: var(--f-mono); color: var(--accent); font-size: 14px; padding-top: 1px; }
+.lp-take b { display: block; }
+.lp-take p { color: var(--ink-2); font-size: 14px; }
+details { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.lp-card { align-content: start; }
+.linkbtn { border: 0; background: none; font: inherit; font-size: 13px; color: var(--accent); cursor: pointer; padding: 0; text-decoration: underline; text-underline-offset: 2px; }
+.lp-legend .sw { border-radius: 2px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -130,7 +181,7 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
     <div class="eyebrow">Behavior Lab · November 4, 2026 · Matty Easton, UC Berkeley</div>
     <h1>The Manosphere in American Politics: Labels, Language, and Ideology</h1>
     <p class="lede">After the 2024 election, journalists pointed to the “manosphere” to explain Donald Trump’s gains among young men, using the word for popular male-oriented podcasts such as Joe Rogan’s and Theo Von’s. In academic research the manosphere means something else: online communities organized around antifeminism and male grievance. This project asks how much the first resembles the second. I collected transcripts from the 19 shows that 2024 news coverage called the manosphere (19,741 episodes) and measured them with three lexicons from the academic literature: <b>LISTN</b> for the classic manosphere’s vocabulary, the <b>Krendel codebook</b> for its ideas, and the <b>Misogyny Lexicon</b> for its hostility toward women. I compare them with 10 popular mainstream podcasts and a political benchmark of 5 political podcasts.</p>
-    <p class="lede">In short: the vocabulary and ideas show up several times more often than in mainstream podcasts, but rarely, mostly in two shows, and without detectably more misogynistic language. A fourth tab shows a preliminary topic model of what the shows talk about. Pick a tab to explore. Lexicon rates are matches per 10,000 words, topic shares are percent of talk, and each show counts once.</p>
+    <p class="lede">In short: the vocabulary and ideas show up several times more often than in mainstream podcasts, but rarely, mostly in two shows, and without detectably more misogynistic language. A fourth tab shows a preliminary topic model of what the shows talk about, and a fifth reports an exploratory pilot in which a language model read 476 transcript excerpts to judge whether the ideas, and not only the words, are present. Pick a tab to explore. Lexicon rates are matches per 10,000 words, topic shares are percent of talk, and each show counts once.</p>
     <div class="legend" aria-label="Show groups">
       <span><i class="sw" style="background:var(--c-trump)"></i>Manosphere: Trump-interview shows (11)</span>
       <span><i class="sw" style="background:var(--c-other)"></i>Manosphere: other shows (8)</span>
@@ -144,6 +195,7 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
     <button class="lextab" role="tab" id="tab-krendel" data-lex="krendel"><b>Krendel codebook</b><small>Ideas · 33 terms in five themes</small></button>
     <button class="lextab" role="tab" id="tab-misogyny" data-lex="misogyny"><b>Misogyny Lexicon</b><small>Hostility · 1,052 terms in nine sub-lexicons</small></button>
     <button class="lextab" role="tab" id="tab-topics" data-lex="topics"><b>Topics</b><small>Subjects · preliminary topic model</small></button>
+    <button class="lextab" role="tab" id="tab-pilot" data-lex="pilot"><b>LLM mini pilot</b><small>Ideas in context · 476 excerpts coded</small></button>
   </nav>
   <nav class="subtabs" role="tablist" aria-label="View" id="subtabs"></nav>
   <main id="panel" class="panel" aria-live="polite"><div class="loading">Loading…</div></main>
@@ -152,6 +204,331 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
 <div class="tip" id="tip" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+/* LLM mini pilot tab (supplementary). Renders into #panel when the pilot tab is selected. */
+(function () {
+"use strict";
+let D, C;
+const $ = (s, r = document) => r.querySelector(s);
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  if (attrs) for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v; else if (k === "text") e.textContent = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat(Infinity)) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return e;
+}
+const SVGNS = "http://www.w3.org/2000/svg";
+function s(tag, attrs) { const e = document.createElementNS(SVGNS, tag); for (const [k, v] of Object.entries(attrs || {})) e.setAttribute(k, v); return e; }
+const pct = (k, n, d = 1) => n ? (k / n * 100).toFixed(d) + "%" : "–";
+const fmt = n => n.toLocaleString("en-US");
+
+const LABEL = { mgtow: "MGTOW", incel: "Incel", mra: "Men's rights (MRA)", pua: "Pick-up artist (PUA)", red_pill: "Red Pill",
+  female_essentialism: "Female essentialism", male_victimhood: "Male victimhood", outgroup_emasculation: "Outgroup emasculation",
+  gender_hierarchy: "Gender hierarchy", sexual_marketplace: "Sexual market hierarchy", antifeminism: "Antifeminism" };
+const LONG = { mgtow: "MGTOW (Men Going Their Own Way)", incel: "Incel (involuntary celibate)", mra: "Men's rights activism (MRA)", pua: "Pick-up artistry (PUA)", red_pill: "Red Pill",
+  female_essentialism: "Female essentialism", male_victimhood: "Male victimhood / grievance", outgroup_emasculation: "Outgroup emasculation",
+  gender_hierarchy: "Gender hierarchy / male authority", sexual_marketplace: "Sexual market hierarchy", antifeminism: "Antifeminism" };
+const KRENDEL = { female_essentialism: "Krendel theme: Female essentialism", sexual_marketplace: "Krendel theme: Sexual marketplace",
+  outgroup_emasculation: "Krendel theme: Outgroup emasculation", red_pill: "Krendel theme: Red-pill epistemology",
+  mgtow: "Krendel theme: Movement identity (naming only)", incel: "Krendel theme: Movement identity (naming only)", pua: "Krendel theme: Movement identity (naming only)",
+  mra: "No Krendel counterpart", male_victimhood: "No Krendel counterpart", gender_hierarchy: "No Krendel counterpart", antifeminism: "No Krendel counterpart" };
+const CLASSIC = ["mgtow", "incel", "mra", "pua", "red_pill"];
+const STANCE = { supportive: "Supportive", critical: "Critical", neutral_reference: "Neutral reference", mixed: "Mixed", absent: "Absent" };
+const stChip = st => h("span", { class: "lp-st " + st, text: STANCE[st] || st });
+
+// tooltip
+const tip = $("#tip");
+function showTip(ev, title, body) { tip.replaceChildren(h("b", { text: title }), body); tip.hidden = false; moveTip(ev); }
+function moveTip(ev) { const x = Math.min(ev.clientX + 14, innerWidth - tip.offsetWidth - 8), y = Math.min(ev.clientY + 14, innerHeight - tip.offsetHeight - 8); tip.style.left = x + "px"; tip.style.top = y + "px"; }
+function hideTip() { tip.hidden = true; }
+
+// ---------- horizontal bar chart (one or two series) ----------
+function barChart(host, { groups, series, max, ticks, valueText, tipText }) {
+  const W = Math.max(280, host.clientWidth || 600), narrow = W < 560;
+  const labelW = narrow ? 0 : Math.min(230, W * 0.34), padR = 54, plotW = W - labelW - padR;
+  const bh = 12, gap = 2, labelH = narrow ? 18 : 0, rowGap = 12;
+  let y = 22; const rows = [];
+  for (const g of groups) {
+    if (g.header) { rows.push({ header: g.header, y }); y += 26; continue; }
+    const blockH = series.length * bh + (series.length - 1) * gap;
+    rows.push({ g, y: y + labelH, blockH }); y += labelH + blockH + rowGap;
+  }
+  const H = y + 4;
+  const svg = s("svg", { width: W, height: H, role: "img", "aria-label": host.dataset.label || "bar chart" });
+  const x = v => labelW + (v / max) * plotW;
+  for (const t of ticks) {
+    svg.append(s("line", { x1: x(t), x2: x(t), y1: 14, y2: H - 4, stroke: "var(--line)", "stroke-width": 1 }));
+    const tx = s("text", { x: x(t), y: 10, "text-anchor": "middle" }); tx.textContent = t + "%"; svg.append(tx);
+  }
+  for (const r of rows) {
+    if (r.header) { const t = s("text", { x: 0, y: r.y + 14, style: "font-weight:600;fill:var(--ink);font-size:12px;letter-spacing:.04em;text-transform:uppercase" }); t.textContent = r.header; svg.append(t); continue; }
+    const lt = s("text", narrow ? { x: 0, y: r.y - 5 } : { x: labelW - 10, y: r.y + r.blockH / 2, "text-anchor": "end", dy: "0.35em" });
+    lt.textContent = r.g.label; lt.setAttribute("style", "fill:var(--ink);font-size:12.5px"); svg.append(lt);
+    series.forEach((se, i) => {
+      const d = r.g.values[i]; if (!d) return;
+      const yy = r.y + i * (bh + gap), w = Math.max(0, x(d.v) - labelW);
+      if (w > 0) svg.append(s("rect", { x: labelW, y: yy, width: w, height: bh, rx: 2, fill: `var(${se.color})` }));
+      else svg.append(s("rect", { x: labelW, y: yy, width: 1.5, height: bh, fill: `var(${se.color})` }));
+      const vt = s("text", { x: x(d.v) + 6, y: yy + bh / 2, dy: "0.35em", style: "font-family:var(--f-mono);font-size:11px" }); vt.textContent = valueText(d); svg.append(vt);
+      const hit = s("rect", { x: labelW, y: yy - 1, width: plotW + padR, height: bh + 2, fill: "transparent" });
+      hit.addEventListener("mousemove", ev => showTip(ev, r.g.label, h("span", { text: tipText(d, se) })));
+      hit.addEventListener("mouseleave", hideTip);
+      svg.append(hit);
+    });
+  }
+  host.replaceChildren(svg);
+}
+function chartCard({ title, note, legend, draw, table }) {
+  const host = h("div", { "data-label": title });
+  const tbl = h("div", { class: "tbl-wrap", hidden: true }, table());
+  const btn = h("button", { class: "linkbtn", type: "button", "aria-expanded": "false", text: "Show as table" });
+  btn.addEventListener("click", () => { const open = tbl.hidden; tbl.hidden = !open; host.hidden = open; btn.textContent = open ? "Show as chart" : "Show as table"; btn.setAttribute("aria-expanded", String(open)); if (!open) draw(host); });
+  const card = h("section", { class: "card lp-card" }, h("h2", { text: title }), note ? h("p", { class: "note", text: note }) : null, legend || null, host, tbl, h("div", null, btn));
+  requestAnimationFrame(() => draw(host));
+  redraws.push(() => { if (!host.hidden && host.isConnected) draw(host); });
+  return card;
+}
+let redraws = [];
+let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => redraws.forEach(f => f()), 120); });
+const legendEl = items => h("div", { class: "legend lp-legend" }, items.map(([c, t]) => h("span", null, h("i", { class: "sw", style: `background:var(${c})` }), t)));
+const tableEl = (head, rows, numCols = []) => h("table", null,
+  h("thead", null, h("tr", null, head.map((c, i) => h("th", { class: numCols.includes(i) ? "n" : null, text: c })))),
+  h("tbody", null, rows.map(r => h("tr", null, r.map((c, i) => h("td", { class: numCols.includes(i) ? "n" : null }, c))))));
+
+// ---------- panels ----------
+const TABS = [
+  ["overview", "Overview", overview],
+  ["prompt", "The prompt", promptTab],
+  ["results", "Results", results],
+  ["changes", "How results changed", changes],
+  ["passages", "Coded passages", examples],
+  ["limits", "Limits and next steps", limits]];
+
+function overview() {
+  const steps = [
+    ["Choose the material", `19 manosphere shows, episodes released Aug 5 to Nov 4, 2024 (the three months before the election). ${fmt(C.episodes)} episodes, cut into ${fmt(C.chunks)} excerpts of about 250 words.`],
+    ["Draw two samples", `A random sample of ${C.random} excerpts (8 per show), and every excerpt containing a LISTN or Krendel term: ${C.dict_pos} in all.`],
+    ["The model reads each excerpt blind", "It sees the excerpt plus about 50 words on each side for context. It does not see the show, host, date, title, or why the excerpt was chosen."],
+    ["It codes eleven ideas", "For each idea it picks one stance: supportive, critical, neutral reference, mixed, or absent. For anything not absent it quotes the passage and gives a reason."],
+    ["Check the output", `Every quote is matched against the transcript automatically (0 mismatches). One repeated ad that was coded inconsistently was corrected by a written rule (${C.adjudicated} codes).`]];
+  return [
+    h("section", { class: "prose" },
+      h("div", { class: "eyebrow", text: "Supplementary · exploratory pilot" }),
+      h("h2", { text: "Do the shows express manosphere ideas, or only use the words?" }),
+      h("p", { text: "The other tabs count words. A word count cannot tell whether a speaker is endorsing an idea, mocking it, criticizing it, or using the same word for something unrelated (“body count” also means war casualties). In this pilot, a language model read short transcript excerpts one at a time and judged whether the speakers express any of eleven ideas that define the manosphere in academic research." }),
+      h("p", { class: "note", text: "Scope: the 19 manosphere shows, episodes released August 5 to November 4, 2024. 476 excerpts coded: a random sample of 152 and every one of the 324 excerpts that contain a LISTN or Krendel term. Early, single-coder results with no human check yet." }),
+      h("p", null, "The research question is: ", h("b", { text: "to what extent do podcasts popularly labeled the “manosphere” express or endorse the ideologies that define the academic manosphere, rather than merely referencing its vocabulary?" })),
+      h("p", { text: "The dictionaries in the other tabs answer “how often do these shows use manosphere words?” This pilot answers two follow-up questions: when the words appear, does the idea come with them? And does the idea appear in ordinary talk, without the words?" })),
+    h("section", { class: "stats", "aria-label": "Headline numbers" },
+      stat("Excerpts coded", fmt(C.total), `${C.random} random + ${C.dict_pos} dictionary hits`),
+      stat("Random excerpts with a supportive code", pct(C.rand_supp, C.random), `${C.rand_supp} of ${C.random}`),
+      stat("Dictionary hits with a supportive code", pct(C.dict_supp, C.dict_pos, 0), `${C.dict_supp} of ${C.dict_pos}`),
+      stat("Quote mismatches", "0", `${C.nonabsent} quoted passages checked`)),
+    h("p", { class: "note", text: "A “supportive code” means the model judged that a speaker endorses, advances, or normalizes at least one of the eleven ideas in that excerpt." }),
+    h("section", { class: "card lp-card" }, h("h2", { text: "How it works" }),
+      h("div", { class: "lp-steps" }, steps.map(([t, d], i) => h("div", { class: "lp-step" }, h("span", { class: "num", text: `Step ${i + 1}` }), h("b", { text: t }), h("p", { text: d }))))),
+    h("section", { class: "card lp-card" }, h("h2", { text: "Why two samples" }),
+      h("div", { class: "lp-samples" },
+        h("div", { class: "lp-sample" }, h("span", { class: "q", text: "Random sample" }), h("span", { class: "big", text: String(C.random) }),
+          h("p", { text: "8 excerpts per show, picked at random from everything the show released in the window." }),
+          h("p", { class: "note", text: "Answers: how common are these ideas in ordinary content?" })),
+        h("div", { class: "lp-sample" }, h("span", { class: "q", text: "Every dictionary hit" }), h("span", { class: "big", text: String(C.dict_pos) }),
+          h("p", { text: `All excerpts with at least one LISTN or Krendel term. Only ${pct(C.dict_pos, C.chunks)} of excerpts have one; ${C.gaines_dict} of the ${C.dict_pos} come from one show, Myron Gaines (Fresh & Fit).` }),
+          h("p", { class: "note", text: "Answers: when the vocabulary appears, how often does the idea come with it?" }))),
+      h("p", { class: "note", text: "The two samples answer different questions, so they are always reported separately and never added together." })),
+    h("section", { class: "card lp-card" }, h("h2", { text: "Three results so far" }),
+      h("div", { class: "lp-takeaways" },
+        take(1, "About one in three dictionary hits carries the idea.", `${C.dict_supp} of ${C.dict_pos} (${pct(C.dict_supp, C.dict_pos, 0)}). Some terms almost always do (“sexual market value”); others rarely do (“red pill” 18%, “the matrix” 6%).`),
+        take(2, "Two different things share the “manosphere” label.", "Myron Gaines carries the classic worldview (33 of 35 classic-ideology codes) and never aims it at political opponents. The political commentary shows (Kirk, Shapiro, Walsh, Crowder, Carlson) use manosphere-style emasculation against opponents (24 of 29 codes) but almost none of the worldview. The comedy and lifestyle shows show neither."),
+        take(3, "In ordinary content the ideas are rare.", `${C.rand_supp} of ${C.random} random excerpts (${pct(C.rand_supp, C.random)}). With so few cases the true rate could be anywhere from about 0.4% to 5.7%.`)))];
+}
+function stat(k, v, sub) { return h("div", { class: "stat" }, h("span", { class: "k", text: k }), h("span", { class: "v", text: v }), h("span", { class: "s", text: sub })); }
+function take(n, b, p) { return h("div", { class: "lp-take" }, h("span", { class: "n", text: String(n) }), h("div", null, h("b", { text: b }), h("p", { text: p }))); }
+
+function promptTab() {
+  const defs = {};
+  for (const line of D.prompt.split("\n")) { const m = line.match(/^\d+\.\s+(\w+)\s+—\s+(.*)$/); if (m) defs[m[1]] = m[2]; }
+  const card = id => h("div", { class: "lp-indcard" }, h("span", { class: "name", text: LONG[id] }), h("code", { text: id }), h("p", { class: "def", text: defs[id] || "" }), h("span", { class: "rel", text: KRENDEL[id] }));
+  const stanceDefs = [];
+  for (const line of D.prompt.split("\n")) { const m = line.match(/^- (supportive|critical|neutral_reference|mixed|absent): (.*)$/); if (m) stanceDefs.push([m[1], m[2]]); }
+  const copyBtn = h("button", { class: "linkbtn", type: "button", text: "Copy prompt" });
+  const pre = h("pre", { class: "lp-prompt", tabindex: "0", text: D.prompt });
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(D.prompt).then(() => { copyBtn.textContent = "Copied"; setTimeout(() => copyBtn.textContent = "Copy prompt", 1600); })
+      .catch(() => { const r = document.createRange(); r.selectNodeContents(pre); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); copyBtn.textContent = "Selected: press Ctrl/Cmd+C"; });
+  });
+  return [
+    h("section", { class: "prose" }, h("h2", { text: "One prompt, eleven ideas" }),
+      h("p", { text: "The model received the same written instructions for every excerpt. The instructions define eleven ideas: five “classic” manosphere ideologies drawn from the communities studied in the academic literature, and six broader themes. Below is the exact wording the model received for each idea. The ideas can overlap, and the model was told not to require the communities' own jargon." })),
+    h("h3", { text: "Five classic manosphere ideologies" }),
+    h("div", { class: "lp-ind" }, CLASSIC.map(card)),
+    h("p", { class: "note", text: "The prompt adds: do not code these for generic masculinity or self-improvement talk, loneliness, opposition to a single policy, ordinary dating or relationship advice, or simply saying a community's name." }),
+    h("h3", { text: "Six broader themes" }),
+    h("div", { class: "lp-ind" }, ["female_essentialism", "male_victimhood", "outgroup_emasculation", "gender_hierarchy", "sexual_marketplace", "antifeminism"].map(card)),
+    h("section", { class: "card lp-card" }, h("h2", { text: "For each idea, one stance" }),
+      h("dl", { class: "lp-stance" }, stanceDefs.map(([k, d]) => [h("dt", null, stChip(k)), h("dd", { text: d })])),
+      h("p", { class: "note", text: "For every stance other than absent, the model also returns an exact quote from the excerpt (checked automatically), whether the idea is stated outright or assumed (explicit or implicit), a confidence level, and a reason of at most 30 words. Speaker role (host or guest) was also requested, but captions have no speaker labels, so it is almost always “unknown”." })),
+    worked(),
+    h("details", null, h("summary", { text: "Full prompt, exactly as sent" }), h("div", null, h("p", { class: "note", text: "The last line refers to a structured-output tool from the API version of this setup. In the in-session run, the coder instructions below replaced it with a JSON file in the same format." }), pre, h("div", null, copyBtn))),
+    h("details", null, h("summary", { text: "Coder instructions (how each batch was run)" }), h("div", null, h("pre", { class: "lp-prompt", tabindex: "0", text: D.instructions })))];
+}
+
+function worked() {
+  let cur = 0;
+  const box = h("div", { class: "grid2" });
+  const seg = h("div", { class: "seg", role: "group", "aria-label": "Worked example" });
+  const opts = [["Excerpt with codes", 0], ["Dictionary false positive", 1]];
+  for (const [t, i] of opts) { const b = h("button", { type: "button", "aria-pressed": String(i === cur), text: t }); b.addEventListener("click", () => { cur = i; seg.querySelectorAll("button").forEach((x, j) => x.setAttribute("aria-pressed", String(j === cur))); draw(); }); seg.append(b); }
+  function markTerms(text, terms) {
+    const words = terms.split(/[;,]/).map(t => t.trim().replace(/_/g, " ")).filter(Boolean);
+    if (!words.length) return [text];
+    const re = new RegExp("(" + words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")", "gi");
+    return text.split(re).map((p, i) => i % 2 ? h("mark", { text: p }) : p);
+  }
+  function draw() {
+    const w = D.worked[cur];
+    const nonAbsent = Object.entries(w.codes).filter(([, c]) => c.stance !== "absent");
+    box.replaceChildren(
+      h("div", { class: "card lp-card" }, h("h3", { text: "What the model saw" }),
+        h("p", { class: "note", text: `Shown here for you, not to the model: ${w.show}, ${w.date}, “${w.title}”. Highlighted: the dictionary term that put this excerpt in the sample.` }),
+        h("div", { class: "lp-input" },
+          h("span", { class: "lbl", text: "Context before" }), h("p", { class: "ctx", text: w.before || "(start of episode)" }),
+          h("span", { class: "lbl", text: "Core excerpt (the only text that is coded)" }), h("p", { class: "core" }, markTerms(w.core, w.terms)),
+          h("span", { class: "lbl", text: "Context after" }), h("p", { class: "ctx", text: w.after || "(end of episode)" }))),
+      h("div", { class: "card lp-card" }, h("h3", { text: "What the model returned" }),
+        nonAbsent.length ? null : h("p", { text: "All eleven ideas absent. The term appears, but the passage is about war casualties, not dating." }),
+        h("div", { class: "tbl-wrap" }, tableEl(["Idea", "Stance", "Quote and reason"],
+          Object.keys(LABEL).map(id => { const c = w.codes[id] || { stance: "absent" }; return [LABEL[id], stChip(c.stance),
+            c.stance === "absent" ? h("span", { class: "note", text: "–" }) : h("div", null, h("div", { text: "“" + c.evidence_quote + "”" }), h("div", { class: "note", text: `${c.explanation} (${c.explicitness}, ${c.confidence} confidence)` }))]; })))));
+  }
+  draw();
+  return h("section", { class: "card lp-card" }, h("h2", { text: "A worked example" }), h("p", { class: "note", text: "Two real excerpts from the pilot: the input the model received, and the codes it returned." }), seg, box);
+}
+
+function results() {
+  const I = D.indicators;
+  const gN = C.gaines_dict, oN = C.other_dict;
+  const cards = [];
+  cards.push(chartCard({
+    title: "Excerpts with at least one supportive code, by sample",
+    note: "Percent of excerpts in which the model found a speaker endorsing at least one of the eleven ideas. The dictionary-hit sample is also split into Myron Gaines and the other 18 shows.",
+    draw: host => barChart(host, { series: [{ color: "--s-one" }], max: 50, ticks: [0, 10, 20, 30, 40, 50],
+      groups: [
+        { label: `Random sample (n = ${C.random})`, values: [{ v: C.rand_supp / C.random * 100, k: C.rand_supp, n: C.random }] },
+        { label: `Every dictionary hit (n = ${C.dict_pos})`, values: [{ v: C.dict_supp / C.dict_pos * 100, k: C.dict_supp, n: C.dict_pos }] },
+        { label: `of which Myron Gaines (n = ${gN})`, values: [{ v: C.gaines_dict_supp / gN * 100, k: C.gaines_dict_supp, n: gN }] },
+        { label: `of which other 18 shows (n = ${oN})`, values: [{ v: C.other_dict_supp / oN * 100, k: C.other_dict_supp, n: oN }] }],
+      valueText: d => (d.v).toFixed(1) + "%", tipText: d => `${d.k} of ${d.n} excerpts (${d.v.toFixed(1)}%)` }),
+    table: () => tableEl(["Sample", "Excerpts", "With a supportive code", "%"], [
+      ["Random sample", C.random, C.rand_supp, pct(C.rand_supp, C.random)],
+      ["Every dictionary hit", C.dict_pos, C.dict_supp, pct(C.dict_supp, C.dict_pos)],
+      ["of which Myron Gaines", gN, C.gaines_dict_supp, pct(C.gaines_dict_supp, gN)],
+      ["of which other 18 shows", oN, C.other_dict_supp, pct(C.other_dict_supp, oN)]], [1, 2, 3])
+  }));
+  const grp = (header, ids) => [{ header }, ...ids.map(id => { const r = I.find(x => x.id === id); return { label: LABEL[id], values: [
+    { v: r.gaines.supportive / r.gaines.n * 100, k: r.gaines.supportive, n: r.gaines.n }, { v: r.other.supportive / r.other.n * 100, k: r.other.supportive, n: r.other.n }] }; })];
+  cards.push(chartCard({
+    title: "Supportive codes by idea: Myron Gaines vs. the other 18 shows",
+    note: "Dictionary-hit excerpts only. Percent of each group's excerpts coded supportive for the idea; one excerpt can count for several ideas. Numbers at the bar ends are counts of excerpts. The random sample is too small to split this way (6 supportive codes in total; see the table view).",
+    legend: legendEl([["--s-gaines", `Myron Gaines (${gN} excerpts)`], ["--s-other", `Other 18 shows (${oN} excerpts)`]]),
+    draw: host => barChart(host, { series: [{ color: "--s-gaines", name: "Myron Gaines" }, { color: "--s-other", name: "Other 18 shows" }], max: 40, ticks: [0, 10, 20, 30, 40],
+      groups: [...grp("Classic ideologies", CLASSIC), ...grp("Broader themes", ["female_essentialism", "sexual_marketplace", "outgroup_emasculation", "male_victimhood", "gender_hierarchy", "antifeminism"])],
+      valueText: d => String(d.k), tipText: (d, se) => `${se.name}: ${d.k} of ${d.n} excerpts (${d.v.toFixed(1)}%)` }),
+    table: () => tableEl(["Idea", "Random (152): supportive", "All dictionary hits (324): supportive", "Myron Gaines (176)", "Other 18 shows (148)", "Other stances, all dictionary hits"],
+      I.map(r => [LONG[r.id], r.random.supportive, r.census.supportive, r.gaines.supportive, r.other.supportive,
+        ["critical", "neutral_reference", "mixed"].filter(k => r.census[k]).map(k => `${r.census[k]} ${STANCE[k].toLowerCase()}`).join(", ") || "–"]), [1, 2, 3, 4])
+  }));
+  cards.push(chartCard({
+    title: "Share of dictionary hits that carry a supportive code, by term",
+    note: "For each term found in at least 4 excerpts: the percent of those excerpts with a supportive code on any idea. Bar labels give the number of excerpts. 35 of the 48 “soy boy” excerpts are one repeated supplement ad, mostly coded absent.",
+    draw: host => barChart(host, { series: [{ color: "--s-one" }], max: 100, ticks: [0, 25, 50, 75, 100],
+      groups: D.terms.map(t => ({ label: `${t.label} (${t.dict})`, values: [{ v: t.supp / t.n * 100, k: t.supp, n: t.n }] })),
+      valueText: d => `n = ${d.n}`, tipText: d => `${d.k} of ${d.n} excerpts (${d.v.toFixed(0)}%)` }),
+    table: () => tableEl(["Term", "Dictionary", "Excerpts", "With a supportive code", "%"], D.terms.map(t => [t.label, t.dict, t.n, t.supp, pct(t.supp, t.n, 0)]), [2, 3, 4])
+  }));
+  const showRows = D.shows.map(r => [r.show, `${r.rand_supp} / ${r.rand_n}`, r.dict_n, r.dict_n ? `${r.dict_supp} (${pct(r.dict_supp, r.dict_n, 0)})` : "–",
+    r.top.length ? r.top.map(([k, v]) => `${LABEL[k]} ${v}`).join(", ") : "–"]);
+  cards.push(h("section", { class: "card lp-card" }, h("h2", { text: "Results by show" }),
+    h("p", { class: "note", text: "Sorted by number of dictionary hits. With 8 random excerpts per show, these numbers describe the sample and cannot rank shows. The dictionary-hit columns cover every hit, but hits are a selected slice of each show." }),
+    h("div", { class: "tbl-wrap" }, tableEl(["Show", "Random: supportive / 8", "Dictionary hits", "With a supportive code", "Most common supportive ideas"], showRows, [1, 2, 3]))));
+  return cards;
+}
+
+function changes() {
+  const rows = D.waves.map(w => [w.label, w.desc, w.total, `${w.rand_supp} / ${w.rand_n} (${pct(w.rand_supp, w.rand_n)})`, `${w.dict_supp} / ${w.dict_n} (${pct(w.dict_supp, w.dict_n, 0)})`,
+    `${w.classic} (${w.classic_gaines} Gaines)`, `${w.oe} (${w.oe_gaines} Gaines)`]);
+  const w1 = D.waves[0], wl = D.waves[D.waves.length - 1];
+  return [
+    h("section", { class: "prose" }, h("h2", { text: "The pilot grew in five waves" }),
+      h("p", { text: "The first run coded 104 excerpts: 3 random and up to 3 dictionary hits per show. We then added random excerpts, and finally coded every remaining dictionary hit in a fixed random order, so the results at each stop were a fair sample of the full set. The table shows the running totals after each wave." })),
+    h("section", { class: "card lp-card" }, h("h2", { text: "Running totals after each wave" }),
+      h("div", { class: "tbl-wrap" }, tableEl(["Wave", "What was added", "Excerpts coded", "Random: with supportive code", "Dictionary hits: with supportive code", "Classic-ideology supportive codes", "Outgroup-emasculation supportive codes"], rows, [2, 3, 4, 5, 6]))),
+    h("section", { class: "card lp-card" }, h("h2", { text: "What held and what changed" }),
+      h("div", { class: "lp-takeaways" },
+        take(1, "Held: about a third of dictionary hits carry the idea.", `${pct(w1.dict_supp, w1.dict_n, 0)} in the first 47 hits, ${pct(wl.dict_supp, wl.dict_n, 0)} across all 324. The share stayed between 34% and 37% at every wave.`),
+        take(2, "Changed: the classic ideologies were not absent, only concentrated.", `After wave 1 there was ${w1.classic} supportive classic-ideology code, and it looked as if MGTOW, incel, MRA and PUA ideas never appear. Wave 1 drew only 3 of Myron Gaines's 176 dictionary hits. Coding all of them raised the count to ${wl.classic}, and ${wl.classic_gaines} of those came from Gaines.`),
+        take(3, "Held: political emasculation never came from Gaines.", `Outgroup-emasculation codes rose from ${w1.oe} to ${wl.oe} as more hits were coded. None came from Myron Gaines at any stage.`),
+        take(4, "Held: the random rate stayed low.", `${w1.rand_supp} of ${w1.rand_n} random excerpts after wave 1 (${pct(w1.rand_supp, w1.rand_n)}), ${wl.rand_supp} of ${wl.rand_n} after wave 2 (${pct(wl.rand_supp, wl.rand_n)}).`)))];
+}
+
+function examples() {
+  const state = { ind: "all", stance: "all", stratum: "all", show: "all", q: "" };
+  const list = h("div", { class: "lp-ex" }), count = h("p", { class: "note" });
+  const sel = (id, label, opts, key) => { const e = h("select", { id }, opts.map(([v, t]) => h("option", { value: v, text: t }))); e.addEventListener("change", () => { state[key] = e.value; draw(); }); return h("label", { for: id }, label, e); };
+  const shows = [...new Set(D.examples.map(e => e.show))].sort();
+  const q = h("input", { type: "search", id: "lp-q", placeholder: "Search quotes", "aria-label": "Search quotes" });
+  q.addEventListener("input", () => { state.q = q.value.toLowerCase(); draw(); });
+  const controls = h("div", { class: "controls" },
+    sel("lp-f-ind", "Idea", [["all", "All ideas"], ...Object.keys(LABEL).map(k => [k, LABEL[k]])], "ind"),
+    sel("lp-f-st", "Stance", [["all", "All stances"], ["supportive", "Supportive"], ["critical", "Critical"], ["neutral_reference", "Neutral reference"], ["mixed", "Mixed"]], "stance"),
+    sel("lp-f-sm", "Sample", [["all", "Both samples"], ["random", "Random sample"], ["dictionary_positive", "Dictionary hits"]], "stratum"),
+    sel("lp-f-sh", "Show", [["all", "All shows"], ...shows.map(s => [s, s])], "show"), q);
+  function draw() {
+    const rows = D.examples.filter(e => (state.ind === "all" || e.ind === state.ind) && (state.stance === "all" || e.stance === state.stance) &&
+      (state.stratum === "all" || e.stratum === state.stratum) && (state.show === "all" || e.show === state.show) &&
+      (!state.q || (e.quote + " " + e.why).toLowerCase().includes(state.q)));
+    count.textContent = `${rows.length} of ${D.examples.length} coded passages`;
+    list.replaceChildren(...rows.map(e => h("article", { class: "lp-exitem " + e.stance },
+      h("div", { class: "meta" }, stChip(e.stance), h("span", { class: "chip", text: LABEL[e.ind] }), h("span", { text: e.show }), h("span", { text: e.date }),
+        h("span", { text: e.stratum === "random" ? "Random sample" : "Dictionary hit" + (e.terms ? ": " + e.terms.replace(/;/g, ", ") : "") }),
+        h("span", { text: `${e.expl}, ${e.conf} confidence` })),
+      h("p", { class: "quote", text: "“" + e.quote + "”" }),
+      h("p", { class: "why", text: e.why }))));
+    if (!rows.length) list.append(h("p", { class: "note", text: "No coded passages match these filters." }));
+  }
+  draw();
+  return [h("section", { class: "prose" }, h("h2", { text: "Every coded passage" }),
+    h("p", { text: `All ${D.examples.length} passages the model coded as anything other than absent, with the quote it pulled and its reason. Quotes are automatic captions, so some wording is garbled.` })),
+    h("section", { class: "card lp-card" }, controls, count, list)];
+}
+
+function limits() {
+  const L = [
+    ["One AI coder, no human check yet.", "Each excerpt was coded once by one model. The next step is for lab coders to blind-code about 60 excerpts (all positives plus a set of absent ones) and measure agreement with the model."],
+    ["No speaker labels.", "Automatic captions do not say who is talking, so a host, a guest, and a caller look the same. This matters for call-in and panel shows."],
+    ["Short excerpts.", "An argument that spans two excerpts can be missed, because only the central 250 words are coded."],
+    ["A small random sample.", "3 positives in 152 random excerpts gives a rough range of 0.4% to 5.7%. Even 2% of the ~47,000 excerpts without a dictionary term would be about 900 excerpts, several times the 118 dictionary hits that carry an idea, so the dictionaries may miss most of the ideological talk. A larger random sample would settle this."],
+    ["Repeated ads and reposted clips.", "One supplement ad (“this ain't no soy boy supplement”) makes up 11% of all dictionary hits, and some shows repost clips of full episodes. Removing both moves the dictionary-hit result from 36% to 35%."],
+    ["Edge cases drift.", "Sports trash talk (“soy boys from California”) was coded supportive in one batch and absent in another. A revised prompt should say how to handle sports rivalry and ads."],
+    ["Run in-session.", "The coding ran inside a Claude session, not through a fixed API call, so it can be repeated as a procedure but not reproduced word for word. A fixed API run of all 476 excerpts would cost about $4 to $7."]];
+  return [h("section", { class: "card lp-card" }, h("h2", { text: "What this pilot can and cannot show" }),
+    h("div", { class: "lp-takeaways" }, L.map(([b, p], i) => take(i + 1, b, p))))];
+}
+
+// ---------- export: the dashboard's main script calls this for the "pilot" tab ----------
+window.LLMPilot = {
+  subs: TABS.map(t => [t[0], t[1]]),
+  render(panel, sub, data) {
+    D = data; C = D.counts; redraws = []; hideTip();
+    const t = TABS.find(x => x[0] === sub) || TABS[0];
+    panel.replaceChildren(...[].concat(t[2]()), h("p", { class: "note", text: "Coding: Claude Sonnet 5.5, run in-session in 19 batches with one fixed prompt (codebook v1). Every quoted passage was checked automatically against the transcript; 0 mismatches. Transcripts are automated captions, so wording is approximate and some profanity is censored as “[ __ ]”." }));
+  }
+};
+})();
+</script>
 <script>
 (() => {
   // ------------------------------------------------------------ state, data, helpers
@@ -218,12 +595,15 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
 
   // ------------------------------------------------------------ routing
   function setHash() { const h = `${state.lex}-${state.sub}`; if (location.hash.slice(1) !== h) history.replaceState(null, "", "#" + h); }
+  const validSub = (lex, sub) => (lex === "pilot" ? window.LLMPilot.subs : lex === "topics" ? TSUBS : SUBS).some(([k]) => k === sub);
   function fromHash() {
+    const p = location.hash.slice(1).match(/^pilot-([a-z]+)$/);
+    if (p) { state.lex = "pilot"; state.sub = validSub("pilot", p[1]) ? p[1] : "overview"; return; }
     const m = location.hash.slice(1).match(/^(listn|krendel|misogyny|topics)-(overview|tests|time|timesub|shows|terms|words|about)$/);
     if (m) { state.lex = m[1]; state.sub = m[2] === "words" && m[1] !== "topics" ? "overview" : m[2]; }
   }
   window.addEventListener("hashchange", () => { const prev = state.lex; fromHash(); if (state.lex !== prev) { state.term = null; state.termsub = ""; state.kwGroup = ""; } render(); });
-  document.querySelectorAll(".lextab").forEach((b) => b.addEventListener("click", () => { if (state.lex !== b.dataset.lex) { state.lex = b.dataset.lex; state.term = null; state.termsub = ""; state.kwGroup = ""; if (state.sub === "words" && state.lex !== "topics") state.sub = "overview"; } render(); }));
+  document.querySelectorAll(".lextab").forEach((b) => b.addEventListener("click", () => { if (state.lex !== b.dataset.lex) { state.lex = b.dataset.lex; state.term = null; state.termsub = ""; state.kwGroup = ""; if (!validSub(state.lex, state.sub)) state.sub = "overview"; } render(); }));
 
   // ------------------------------------------------------------ main render
   async function render() {
@@ -231,6 +611,13 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
     setHash();
     document.querySelectorAll(".lextab").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.lex === state.lex)));
     const st = $("#subtabs");
+    if (state.lex === "pilot") {
+      st.replaceChildren(...window.LLMPilot.subs.map(([k, l]) => el("button", { class: "subtab", role: "tab", "aria-selected": String(k === state.sub), onclick: () => { state.sub = k; render(); } }, l)));
+      const pp = $("#panel");
+      if (!cache.pilot) { pp.replaceChildren(el("div", { class: "loading", text: "Loading…" })); const r = await fetch("data/llm_pilot.json"); if (!r.ok) throw new Error("llm_pilot"); cache.pilot = await r.json(); }
+      window.LLMPilot.render(pp, state.sub, cache.pilot);
+      return;
+    }
     const T = state.lex === "topics";
     st.replaceChildren(...(T ? TSUBS : SUBS).map(([k, l]) => el("button", { class: "subtab", role: "tab", "aria-selected": String(k === state.sub), onclick: () => { state.sub = k; render(); } }, k === "timesub" && !T ? l + SUBLAB[state.lex] : l)));
     const panel = $("#panel");
@@ -896,7 +1283,7 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
   }
 
   // ------------------------------------------------------------ boot
-  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (state.sub !== "terms") render(); }, 250); });
+  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (state.sub !== "terms" && state.lex !== "pilot") render(); }, 250); });
   fromHash();
   render().catch((e) => { $("#panel").replaceChildren(el("p", { class: "warn", text: "The data could not load. Reload the page; if this persists, the data files are missing." })); console.error(e); });
 })();
