@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manosphere Lexicon Explorer</title>
+<meta name="description" content="Companion to the lab memo The Manosphere in American Politics: three lexicons and a preliminary topic model across 34 podcasts.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a research notebook — a narrow reading header, then a tabbed workspace: lexicon tabs, subtabs, one panel at a time. */
+:root {
+  --bg: #f5f6f8; --surface: #ffffff; --surface-2: #eef0f4; --ink: #15171c; --ink-2: #4e5461; --ink-3: #7a8090;
+  --line: #dde0e7; --accent: #1f5fbf; --accent-soft: #e6eefb;
+  --c-all: #1f5fbf; --c-other: #1f5fbf; --c-trump: #c62828; --c-political: #2e8b57; --c-control: #8c8c8c;
+  --hi: #e6eefb; --hi-ink: #174a99; --lo: #fbeee2; --lo-ink: #8a4a10;
+  --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111317; --surface: #191c21; --surface-2: #22262d; --ink: #e8eaee; --ink-2: #b2b7c2; --ink-3: #8a909c;
+  --line: #2e333c; --accent: #6b9be6; --accent-soft: #1d2a40;
+  --c-all: #5b8fe0; --c-other: #5b8fe0; --c-trump: #e2574f; --c-political: #3fae74; --c-control: #9aa0a8;
+  --hi: #1d2a40; --hi-ink: #a9c4f1; --lo: #3a2a1a; --lo-ink: #f0c08a; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111317; --surface: #191c21; --surface-2: #22262d; --ink: #e8eaee; --ink-2: #b2b7c2; --ink-3: #8a909c;
+  --line: #2e333c; --accent: #6b9be6; --accent-soft: #1d2a40;
+  --c-all: #5b8fe0; --c-other: #5b8fe0; --c-trump: #e2574f; --c-political: #3fae74; --c-control: #9aa0a8;
+  --hi: #1d2a40; --hi-ink: #a9c4f1; --lo: #3a2a1a; --lo-ink: #f0c08a; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+header.intro { display: grid; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+h1 { font-family: var(--f-display); font-weight: 600; font-size: clamp(26px, 3.6vw, 38px); line-height: 1.15; margin: 0; text-wrap: balance; max-width: 26ch; }
+h2 { font-family: var(--f-display); font-weight: 600; font-size: 22px; margin: 0; text-wrap: balance; }
+h3 { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; margin: 0; }
+p { margin: 0; }
+.lede { max-width: 72ch; color: var(--ink); }
+.lede + .lede { color: var(--ink-2); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+/* lexicon tabs */
+.lextabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+.lextab { text-align: left; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 12px 14px; cursor: pointer; font: inherit; display: grid; gap: 2px; }
+.lextab b { font-family: var(--f-display); font-size: 19px; font-weight: 600; }
+.lextab small { color: var(--ink-2); font-size: 13px; }
+.lextab[aria-selected="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--accent-soft); }
+.lextab:focus-visible, .subtab:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 900px) { .lextabs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 460px) { .lextabs { grid-template-columns: 1fr; } }
+.tag { display: inline-block; font-size: 11px; color: var(--ink-3); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-left: 6px; font-weight: 400; vertical-align: 1px; }
+.words { font-size: 12.5px; color: var(--ink-2); }
+.wordchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.wordchips button.chip[aria-pressed="false"] { opacity: 1; color: var(--ink); }
+.wordchips button.chip:hover { border-color: var(--accent); }
+.wordchips button.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+td.bar { min-width: 120px; }
+.minibar { height: 8px; border-radius: 2px; display: block; }
+.subtabs { display: flex; gap: 4px; overflow-x: auto; margin-top: 14px; border-bottom: 1px solid var(--line); scrollbar-width: thin; }
+.subtab { border: 0; background: none; font: inherit; font-size: 14px; color: var(--ink-2); padding: 10px 12px; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.subtab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+.panel { display: grid; gap: 22px; padding-top: 22px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 14px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { border: 0; background: none; font: inherit; font-size: 13px; padding: 6px 12px; cursor: pointer; color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.chk { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 13px; cursor: pointer; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.note { font-size: 13px; color: var(--ink-2); max-width: 80ch; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; }
+.stat .k { font-size: 12px; color: var(--ink-2); display: flex; gap: 6px; align-items: center; }
+.stat .v { font-family: var(--f-mono); font-size: 22px; font-variant-numeric: tabular-nums; }
+.stat .s { font-size: 12px; color: var(--ink-3); }
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--ink-2); font-size: 12.5px; white-space: nowrap; }
+th.n { font-family: var(--f-body); }
+table.tests th.n { white-space: normal; min-width: 92px; vertical-align: bottom; line-height: 1.3; }
+td.n, th.n { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.click { cursor: pointer; }
+tr.click:hover td { background: var(--surface-2); }
+tr.sel td { background: var(--accent-soft); }
+th.sort { cursor: pointer; user-select: none; }
+th.sort::after { content: " ↕"; color: var(--ink-3); font-weight: 400; }
+td.sig-hi { background: var(--hi); color: var(--hi-ink); font-weight: 600; }
+td.sig-lo { background: var(--lo); color: var(--lo-ink); font-weight: 600; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 12.5px; color: var(--ink-2); background: var(--surface); }
+button.chip { cursor: pointer; font: inherit; font-size: 12.5px; }
+button.chip[aria-pressed="false"] { opacity: .45; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.grid-sm { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+@media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+svg { display: block; overflow: visible; }
+svg text { fill: var(--ink-2); font-family: var(--f-body); font-size: 11px; }
+svg .axis line, svg .axis path { stroke: var(--line); }
+svg .grid line { stroke: var(--line); }
+.tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 16px rgba(0,0,0,.12); max-width: 280px; z-index: 50; }
+.tip b { display: block; margin-bottom: 2px; }
+.kwic { display: grid; gap: 10px; max-height: 620px; overflow-y: auto; padding-right: 4px; }
+.kw { border-left: 3px solid var(--line); padding: 4px 0 4px 10px; display: grid; gap: 3px; }
+.kw .meta { font-size: 12px; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.kw .ctx { font-size: 14px; }
+mark { background: var(--accent-soft); color: var(--ink); padding: 0 2px; border-radius: 3px; font-weight: 600; }
+.terms-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 960px) { .terms-layout { grid-template-columns: 1fr; } }
+.terms-scroll { max-height: 640px; overflow: auto; }
+.terms-scroll thead th { position: sticky; top: 0; background: var(--surface); z-index: 1; }
+input[type="search"], select { font: inherit; font-size: 14px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); max-width: 100%; }
+.warn { font-size: 12.5px; color: var(--lo-ink); background: var(--lo); border-radius: 8px; padding: 8px 10px; }
+.showhead { display: grid; gap: 6px; }
+.prose { display: grid; gap: 10px; max-width: 78ch; }
+.prose ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+a { color: var(--accent); }
+.loading { color: var(--ink-3); padding: 30px 0; }
+footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="intro">
+    <div class="eyebrow">Behavior Lab · November 4, 2026 · Matty Easton, UC Berkeley</div>
+    <h1>The Manosphere in American Politics: Labels, Language, and Ideology</h1>
+    <p class="lede">After the 2024 election, journalists pointed to the “manosphere” to explain Donald Trump’s gains among young men, using the word for popular male-oriented podcasts such as Joe Rogan’s and Theo Von’s. In academic research the manosphere means something else: online communities organized around antifeminism and male grievance. This project asks how much the first resembles the second. I collected transcripts from the 19 shows that 2024 news coverage called the manosphere (19,741 episodes) and measured them with three lexicons from the academic literature: <b>LISTN</b> for the classic manosphere’s vocabulary, the <b>Krendel codebook</b> for its ideas, and the <b>Misogyny Lexicon</b> for its hostility toward women. I compare them with 10 popular mainstream podcasts and a political benchmark of 5 political podcasts.</p>
+    <p class="lede">In short: the vocabulary and ideas show up several times more often than in mainstream podcasts, but rarely, mostly in two shows, and without detectably more misogynistic language. A fourth tab shows a preliminary topic model of what the shows talk about. Pick a tab to explore. Lexicon rates are matches per 10,000 words, topic shares are percent of talk, and each show counts once.</p>
+    <div class="legend" aria-label="Show groups">
+      <span><i class="sw" style="background:var(--c-trump)"></i>Manosphere: Trump-interview shows (11)</span>
+      <span><i class="sw" style="background:var(--c-other)"></i>Manosphere: other shows (8)</span>
+      <span><i class="sw" style="background:var(--c-political)"></i>Political benchmark (5)</span>
+      <span><i class="sw" style="background:var(--c-control)"></i>Mainstream control podcasts (10)</span>
+    </div>
+  </header>
+
+  <nav class="lextabs" role="tablist" aria-label="Lexicon">
+    <button class="lextab" role="tab" id="tab-listn" data-lex="listn"><b>LISTN</b><small>Vocabulary · 454 expert-validated terms</small></button>
+    <button class="lextab" role="tab" id="tab-krendel" data-lex="krendel"><b>Krendel codebook</b><small>Ideas · 33 terms in five themes</small></button>
+    <button class="lextab" role="tab" id="tab-misogyny" data-lex="misogyny"><b>Misogyny Lexicon</b><small>Hostility · 1,052 terms in nine sub-lexicons</small></button>
+    <button class="lextab" role="tab" id="tab-topics" data-lex="topics"><b>Topics</b><small>Subjects · preliminary topic model</small></button>
+  </nav>
+  <nav class="subtabs" role="tablist" aria-label="View" id="subtabs"></nav>
+  <main id="panel" class="panel" aria-live="polite"><div class="loading">Loading…</div></main>
+  <footer>Companion to the lab memo “The Manosphere in American Politics” (Behavior Lab, November 4, 2026). Group values are averages of show rates (or topic shares); tests are two-sided Mann–Whitney tests on show values. Jake Paul is excluded. Transcripts are automated and some YouTube captions censor profanity, so counts are approximate.</footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+(() => {
+  // ------------------------------------------------------------ state, data, helpers
+  const SUBS = [["overview", "Overview"], ["tests", "Group tests"], ["time", "Over time"], ["timesub", "Over time by "], ["shows", "Shows"], ["terms", "Terms & examples"], ["about", "About this lexicon"]];
+  const TSUBS = [["overview", "Overview"], ["tests", "Group tests"], ["time", "Over time"], ["timesub", "Over time by topic"], ["shows", "Shows"], ["terms", "Topics & examples"], ["words", "Distinctive words"], ["about", "About the topic model"]];
+  const SUBLAB = { listn: "community", krendel: "theme", misogyny: "sub-lexicon" };
+  const G = {
+    all: { label: "Manosphere, all", short: "All manosphere", c: "--c-all" },
+    trump: { label: "Trump interviews", short: "Trump", c: "--c-trump" },
+    other: { label: "Other manosphere", short: "Other", c: "--c-other" },
+    political: { label: "Political benchmark", short: "Political benchmark", c: "--c-political" },
+    control: { label: "Control", short: "Control", c: "--c-control" },
+  };
+  const LINEG = [["mano", "all"], ["trump", "trump"], ["political", "political"], ["control", "control"]];
+  const state = { tlevel: 12, topic: null, wcomp: "mano_vs_control", word: null, tsort: ["all", -1], lex: "listn", sub: "overview", period: "all", noff: false, show: null, term: null, termq: "", termsub: "", termUsed: true, termSort: ["h_all", -1], kwGroup: "", lines: { all: true, trump: true, political: true, control: true } };
+  const cache = {}, kcache = {};
+  const $ = (s, el = document) => el.querySelector(s);
+  const el = (tag, attrs = {}, ...kids) => {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") e.className = v; else if (k === "text") e.textContent = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+      else if (v !== null && v !== undefined && v !== false) e.setAttribute(k, v);
+    }
+    for (const k of kids.flat()) if (k !== null && k !== undefined && k !== false) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+    return e;
+  };
+  const rc = (node, ...kids) => node.replaceChildren(...kids.flat().filter((k) => k !== null && k !== undefined && k !== false));
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const fmt = (v) => v === null || v === undefined || !isFinite(v) ? "–" : v === 0 ? "0" : v >= 10 ? v.toFixed(1) : v >= 1 ? v.toFixed(2) : d3.format(".2r")(v);
+  const fmtP = (p) => p === null || p === undefined || !isFinite(p) ? "–" : p < 0.001 ? "< .001" : (p < 0.1 ? p.toFixed(3) : p.toFixed(2)).replace(/^0/, "");
+  const fmtInt = d3.format(",");
+  const tip = $("#tip");
+  const showTip = (ev, head, lines) => {
+    tip.replaceChildren(el("b", { text: head }), ...lines.map((l) => el("div", { text: l })));
+    tip.hidden = false;
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    let x = ev.clientX + 14, y = ev.clientY + 14;
+    if (x + w > innerWidth - 8) x = ev.clientX - w - 14;
+    if (y + h > innerHeight - 8) y = ev.clientY - h - 14;
+    tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px";
+  };
+  const hideTip = () => { tip.hidden = true; };
+  async function load(lex) {
+    const f = lex === "topics" ? `topics${state.tlevel}` : lex;
+    if (!cache[f]) { const r = await fetch(`data/${f}.json`); if (!r.ok) throw new Error(f); cache[f] = await r.json(); }
+    return cache[f];
+  }
+  let xcache = null;
+  async function loadX() { if (!xcache) { const r = await fetch("data/topics_extra.json"); xcache = await r.json(); } return xcache; }
+  const isT = (D) => D.kind === "topics";
+  const unit = (D) => (isT(D) ? "% of talk" : "per 10,000 words");
+  const fv = (D, v) => (!isT(D) ? fmt(v) : v === null || v === undefined || !isFinite(v) ? "–" : (v < 1 ? v.toFixed(2) : v.toFixed(1)) + "%");
+  // value of a show-year cell: topic share (already %) or lexicon rate per 10,000 words
+  const syv = (D, e, mid, i) => (isT(D) ? e[mid][i] : e[mid][i] / e.words[i] * 1e4);
+  async function loadK(lex) {
+    if (!kcache[lex]) { const r = await fetch(`data/kwic_${lex}.json`); kcache[lex] = await r.json(); }
+    return kcache[lex];
+  }
+  const showGroup = (D, key) => D.shows.find((s) => s.key === key)?.group;
+  const gcol = (g) => `var(${(G[g] || G.all).c})`;
+  const seg = (opts, cur, on) => el("div", { class: "seg", role: "group" }, opts.map(([v, l]) => el("button", { type: "button", "aria-pressed": String(v === cur), onclick: () => on(v) }, l)));
+  const periodCtl = () => el("div", { class: "row" }, el("span", { class: "note", text: "Period" }), seg([["all", "All years"], ["2024", "2024 only"]], state.period, (v) => { state.period = v; render(); }));
+  const noffCtl = () => el("label", { class: "chk" }, el("input", { type: "checkbox", id: "noff", ...(state.noff ? { checked: "" } : {}), onchange: (e) => { state.noff = e.target.checked; render(); } }), "Exclude Fresh & Fit (the outlier)");
+
+  // ------------------------------------------------------------ routing
+  function setHash() { const h = `${state.lex}-${state.sub}`; if (location.hash.slice(1) !== h) history.replaceState(null, "", "#" + h); }
+  function fromHash() {
+    const m = location.hash.slice(1).match(/^(listn|krendel|misogyny|topics)-(overview|tests|time|timesub|shows|terms|words|about)$/);
+    if (m) { state.lex = m[1]; state.sub = m[2] === "words" && m[1] !== "topics" ? "overview" : m[2]; }
+  }
+  window.addEventListener("hashchange", () => { const prev = state.lex; fromHash(); if (state.lex !== prev) { state.term = null; state.termsub = ""; state.kwGroup = ""; } render(); });
+  document.querySelectorAll(".lextab").forEach((b) => b.addEventListener("click", () => { if (state.lex !== b.dataset.lex) { state.lex = b.dataset.lex; state.term = null; state.termsub = ""; state.kwGroup = ""; if (state.sub === "words" && state.lex !== "topics") state.sub = "overview"; } render(); }));
+
+  // ------------------------------------------------------------ main render
+  async function render() {
+    hideTip();
+    setHash();
+    document.querySelectorAll(".lextab").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.lex === state.lex)));
+    const st = $("#subtabs");
+    const T = state.lex === "topics";
+    st.replaceChildren(...(T ? TSUBS : SUBS).map(([k, l]) => el("button", { class: "subtab", role: "tab", "aria-selected": String(k === state.sub), onclick: () => { state.sub = k; render(); } }, k === "timesub" && !T ? l + SUBLAB[state.lex] : l)));
+    const panel = $("#panel");
+    panel.replaceChildren(el("div", { class: "loading", text: "Loading…" }));
+    const D = await load(state.lex);
+    if (T && (!state.topic || !D.measures.some((m) => m.id === state.topic))) state.topic = D.measures.slice().sort((a, b) => D.groups.all[b.id].all.mean - D.groups.all[a.id].all.mean)[0].id;
+    const views = T ? { overview: tOverview, tests, time: tTime, timesub, shows: tShows, terms: tTerms, words: tWords, about: tAbout } : { overview, tests, time, timesub, shows, terms, about };
+    panel.replaceChildren();
+    await views[state.sub](panel, D);
+  }
+
+  // ------------------------------------------------------------ shared chart: dot plot of shows
+  function dotPlot(host, D, mid, period, opts = {}) {
+    const rates = D.rates[period][mid] || {};
+    const T = isT(D);
+    const lanes = [["trump", "Trump interviews"], ["other", "Other manosphere"], ["political", "Political benchmark"], ["control", "Control"]];
+    const rows = D.shows.filter((s) => s.key in rates).map((s) => ({ ...s, v: rates[s.key] }));
+    const W = Math.max(320, host.clientWidth || 700), laneH = opts.laneH || 38, top = 24, left = 158, right = 18, H = top + lanes.length * laneH + 34;
+    const svg = d3.select(host).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("height", H).attr("role", "img").attr("aria-label", "Show values by group");
+    const pos = rows.filter((r) => r.v > 0).map((r) => r.v);
+    if (!pos.length) { svg.append("text").attr("x", left).attr("y", 30).text("No matches in any show for this period."); return; }
+    let x, X, tk;
+    if (T) {
+      x = d3.scaleLinear([0, d3.max(pos) * 1.08], [left + 6, W - right]).nice(); X = x; tk = x.ticks(W < 560 ? 4 : 7);
+    } else {
+      const lo = d3.min(pos) / 1.8, hi = d3.max(pos) * 1.6, stub = left + 6, x0 = left + 28;
+      x = d3.scaleLog([lo, hi], [x0, W - right]);
+      X = (v) => (v > 0 ? x(v) : stub);
+      const ticks = x.ticks().filter((t) => Math.abs(Math.log10(t) - Math.round(Math.log10(t))) < 1e-9);
+      tk = ticks.length >= 2 ? ticks : x.ticks(4);
+      svg.append("text").attr("x", stub).attr("y", H - 16).attr("text-anchor", "middle").text("0");
+    }
+    svg.append("g").attr("class", "grid").selectAll("line").data(tk).join("line").attr("x1", x).attr("x2", x).attr("y1", top).attr("y2", top + lanes.length * laneH);
+    svg.append("g").selectAll("text").data(tk).join("text").attr("x", x).attr("y", H - 16).attr("text-anchor", "middle").text((t) => d3.format("~g")(t) + (T ? "%" : ""));
+    svg.append("text").attr("x", (left + W - right) / 2).attr("y", H - 1).attr("text-anchor", "middle").text(T ? "Share of the show’s talk" : "Matches per 10,000 words (log scale)");
+    const gk = opts.noff ? "all_noff" : "all";
+    const allMean = D.groups[period][mid]?.[gk]?.mean;
+    // all-manosphere reference first, so the dots sit on top of it
+    if (allMean > 0) {
+      const ax = X(allMean), y2 = top + 2 * laneH;
+      svg.append("line").attr("x1", ax).attr("x2", ax).attr("y1", top - 6).attr("y2", y2).style("stroke", "var(--c-all)").attr("stroke-width", 2.5).attr("stroke-dasharray", "6,4");
+      const lab = `${opts.noff ? "all 18 manosphere (excl. F&F)" : "all 19 manosphere"}: ${fv(D, allMean)}`;
+      const flip = ax > W - right - 200;
+      svg.append("text").attr("x", flip ? ax - 6 : ax + 6).attr("y", top - 9).attr("text-anchor", flip ? "end" : "start")
+        .style("fill", "var(--c-all)").style("font-weight", 600).style("font-size", "12px").text(lab);
+    }
+    lanes.forEach(([g, lab], i) => {
+      const cy = top + i * laneH + laneH / 2;
+      svg.append("text").attr("x", 0).attr("y", cy).attr("dy", "0.35em").style("fill", "var(--ink)").text(`${lab} (${rows.filter((r) => r.group === g).length})`);
+      const pts = rows.filter((r) => r.group === g).sort((a, b) => a.v - b.v);
+      const out = (r) => opts.noff && r.key === "Myron Gaines";
+      const m = d3.mean(pts.filter((r) => !out(r)), (r) => r.v);
+      if (m > 0) svg.append("line").attr("x1", X(m)).attr("x2", X(m)).attr("y1", cy - 13).attr("y2", cy + 13).style("stroke", "var(--ink)").attr("stroke-width", 2).attr("stroke-linecap", "round");
+      svg.append("g").selectAll("circle").data(pts).join("circle")
+        .attr("cx", (r) => X(r.v)).attr("cy", (r, j) => cy + ((j % 3) - 1) * 6).attr("r", (r) => (r.key === state.show ? 7 : 5))
+        .style("fill", gcol(g)).attr("fill-opacity", (r) => (out(r) ? 0.2 : 0.85)).style("stroke", (r) => (r.key === state.show ? "var(--ink)" : "var(--surface)")).attr("stroke-width", (r) => (r.key === state.show ? 2 : 1.2))
+        .style("cursor", "pointer")
+        .on("mousemove", (ev, r) => showTip(ev, r.name, [T ? `${fv(D, r.v)} of talk` : `${fmt(r.v)} per 10,000 words`, out(r) ? "Excluded from the averages" : "", "Click to open this show"].filter(Boolean)))
+        .on("mouseleave", hideTip)
+        .on("click", (ev, r) => { state.show = r.key; state.sub = "shows"; render(); });
+    });
+  }
+
+  // ------------------------------------------------------------ 1. Overview
+  function overview(panel, D) {
+    const P = state.period, mid = D.total, g = D.groups[P][mid], t = D.tests[P][mid];
+    const sfx = state.noff ? "_noff" : "";
+    panel.append(el("div", { class: "controls" }, periodCtl(), noffCtl()));
+    const ratio = P === "all" && !state.noff ? D.ci.all19 : null;
+    const rr = g["all" + sfx].mean / g.control.mean;
+    const stats = el("div", { class: "stats" },
+      ...[["all" + sfx, "Manosphere, all" + (state.noff ? " (excl. F&F)" : "")], ["trump", "Trump interviews"], ["political", "Political benchmark"], ["control", "Mainstream control"]].map(([k, lab]) =>
+        el("div", { class: "stat" }, el("div", { class: "k" }, el("i", { class: "sw", style: `background:${gcol(k.replace("_noff", ""))}` }), lab), el("div", { class: "v", text: fmt(g[k].mean) }), el("div", { class: "s", text: `per 10,000 words · ${g[k].n} shows` }))),
+      el("div", { class: "stat" }, el("div", { class: "k", text: "Ratio to control (all manosphere)" }), el("div", { class: "v", text: isFinite(rr) ? rr.toFixed(1) + "×" : "–" }),
+        el("div", { class: "s", text: (ratio ? `95% CI ${fmt(ratio.lo)}–${fmt(ratio.hi)} · ` : "") + `p ${fmtP(t[`all${sfx}|control`].p)}` })));
+    panel.append(stats);
+    const c = el("div", { class: "card" }, el("h3", { text: `Every show · ${D.name}, ${P === "all" ? "all years" : "2024"}` }));
+    const host = el("div"); c.append(host, el("p", { class: "note", text: "Each dot is one show; black ticks mark group averages and the dashed blue line the average of all 19 manosphere shows (18 with Fresh & Fit excluded, shown faded). Shows with no matches sit at 0. Click a dot to open that show." }));
+    panel.append(c);
+    dotPlot(host, D, mid, P, { noff: state.noff });
+    // subgroup summary
+    const card = el("div", { class: "card" }, el("h3", { text: `By ${D.sublabel}` }));
+    const tb = el("table");
+    tb.append(el("thead", {}, el("tr", {}, el("th", { text: D.sublabel[0].toUpperCase() + D.sublabel.slice(1) }), el("th", { class: "n", text: "Manosphere" }), el("th", { class: "n", text: "Trump" }), el("th", { class: "n", text: "Political benchmark" }), el("th", { class: "n", text: "Control" }), el("th", { class: "n", text: "Ratio" }), el("th", { class: "n", text: "p vs. control" }))));
+    const body = el("tbody");
+    D.measures.forEach((m) => {
+      const gg = D.groups[P][m.id], tt = D.tests[P][m.id];
+      if (!gg) return;
+      const p = tt[`all${sfx}|control`];
+      const r = gg["all" + sfx].mean / gg.control.mean;
+      const sig = p.p !== null && p.p < 0.05;
+      body.append(el("tr", { class: "click", onclick: () => { state.sub = "tests"; render(); } },
+        el("td", {}, m.id === D.total ? el("b", { text: "Total" }) : m.label), el("td", { class: "n", text: fmt(gg["all" + sfx].mean) }), el("td", { class: "n", text: fmt(gg.trump.mean) }),
+        el("td", { class: "n", text: fmt(gg.political.mean) }), el("td", { class: "n", text: fmt(gg.control.mean) }), el("td", { class: "n", text: isFinite(r) && r > 0 ? r.toFixed(1) + "×" : "–" }),
+        el("td", { class: "n" + (sig ? (p.dir === "higher" ? " sig-hi" : " sig-lo") : ""), text: fmtP(p.p) })));
+    });
+    tb.append(body);
+    card.append(el("div", { class: "tbl-wrap" }, tb), el("p", { class: "note", text: "Average show rates per 10,000 words. Shaded cells differ from control at p < .05 (blue = higher, orange = lower). Click a row for every comparison." }));
+    panel.append(card);
+  }
+
+  // ------------------------------------------------------------ 2. Group tests
+  function tests(panel, D) {
+    const P = state.period, sfx = state.noff ? "_noff" : "";
+    panel.append(el("div", { class: "controls" }, periodCtl(), noffCtl()));
+    const comps = [["all", "control", "All manosphere vs. control"], ["trump", "control", "Trump vs. control"], ["other", "control", "Other manosphere vs. control"],
+      ["all", "political", "All manosphere vs. political benchmark"], ["trump", "political", "Trump vs. political benchmark"], ["other", "political", "Other vs. political benchmark"], ["trump", "other", "Trump vs. other manosphere"]];
+    if (isT(D)) panel.firstChild.prepend(levelCtl());
+    const card = el("div", { class: "card" }, el("h3", { text: `p-values, two-sided Mann–Whitney tests on show ${isT(D) ? "shares" : "rates"}` }));
+    const tb = el("table", { class: "tests" });
+    tb.append(el("thead", {}, el("tr", {}, el("th", { text: "" }), ...comps.map((c) => el("th", { class: "n", text: c[2] })))));
+    const body = el("tbody");
+    D.measures.forEach((m) => {
+      const tt = D.tests[P][m.id]; if (!tt) return;
+      body.append(el("tr", {}, el("td", {}, m.id === D.total ? el("b", { text: "Total" }) : m.label, m.kind === "format" ? el("span", { class: "tag", text: "format" }) : null), ...comps.map(([a, b]) => {
+        const key = `${a}${sfx}|${b}`;
+        const r = tt[key] || tt[`${a}|${b}`];
+        const sig = r && r.p !== null && r.p < 0.05;
+        return el("td", { class: "n" + (sig ? (r.dir === "higher" ? " sig-hi" : " sig-lo") : ""), title: r ? `${r.dir} · p = ${fmtP(r.p)}` : "" }, r ? (sig ? (r.dir === "higher" ? "▲ " : "▼ ") : "") + fmtP(r.p) : "–");
+      })));
+    });
+    tb.append(body);
+    card.append(el("div", { class: "tbl-wrap" }, tb), el("p", { class: "note", text: "▲ blue: the first group is higher (p < .05). ▼ orange: the first group is lower. Unshaded: no significant difference. With this many tests, a few shaded cells would appear by chance; patterns across rows and comparisons matter more than any single cell." + (state.noff ? " Fresh & Fit is excluded from “all manosphere” and “other manosphere.”" : "") }));
+    panel.append(card);
+    // group means
+    const c2 = el("div", { class: "card" }, el("h3", { text: `Group averages (${isT(D) ? "percent of talk" : "matches per 10,000 words"})` }));
+    const ref = D.total || D.measures[0].id;
+    const t2 = el("table");
+    const gk = [["all" + sfx, "All manosphere"], ["trump", "Trump"], ["other" + sfx, "Other manosphere"], ["political", "Political benchmark"], ["control", "Control"]];
+    t2.append(el("thead", {}, el("tr", {}, el("th", { text: "" }), ...gk.map(([k, l]) => el("th", { class: "n" }, el("span", { class: "row", style: "justify-content:flex-end;gap:6px" }, el("i", { class: "sw", style: `background:${gcol(k.replace("_noff", ""))}` }), `${l} (${D.groups[P][ref][k].n})`))))));
+    const b2 = el("tbody");
+    D.measures.forEach((m) => { const gg = D.groups[P][m.id]; if (!gg) return; b2.append(el("tr", {}, el("td", {}, m.id === D.total ? el("b", { text: "Total" }) : m.label), ...gk.map(([k]) => el("td", { class: "n", text: fv(D, gg[k].mean) })))); });
+    t2.append(b2);
+    c2.append(el("div", { class: "tbl-wrap" }, t2), el("p", { class: "note", text: (P === "2024" ? "2024 only: episodes dated 2024, counting shows with at least 100,000 words that year." : "All available episodes for each show.") + (isT(D) ? " Topic labels are provisional. With " + D.measures.length + " topics × 7 comparisons, several cells would be shaded by chance alone." : "") }));
+    panel.append(c2);
+  }
+
+  // ------------------------------------------------------------ line chart for group trends
+  function lineChart(host, D, mid, opts = {}) {
+    const ser = D.years[mid] || {};
+    const W = Math.max(300, host.clientWidth || 600), H = opts.h || 300, m = { t: 14, r: opts.labels === false ? 16 : 132, b: 30, l: 46 };
+    const svg = d3.select(host).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("height", H);
+    const series = LINEG.filter(([k, g]) => state.lines[g] && ser[k]).map(([k, g]) => ({ g, pts: ser[k].filter((p) => p[2] >= 3).map((p) => ({ year: p[0], v: p[1], n: p[2] })) })).filter((s) => s.pts.length);
+    const all = series.flatMap((s) => s.pts);
+    const x = d3.scaleLinear([2015, 2027], [m.l, W - m.r]);
+    const y = d3.scaleLinear([0, (d3.max(all, (p) => p.v) || 1) * 1.1], [H - m.b, m.t]).nice();
+    svg.append("g").attr("class", "grid").selectAll("line").data(y.ticks(4)).join("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y).attr("y2", y);
+    svg.append("g").selectAll("text").data(y.ticks(4)).join("text").attr("x", m.l - 6).attr("y", y).attr("dy", "0.35em").attr("text-anchor", "end").text((v) => d3.format("~g")(v) + (isT(D) ? "%" : ""));
+    svg.append("g").selectAll("text").data([2016, 2018, 2020, 2022, 2024, 2026]).join("text").attr("x", (v) => x(v + 0.5)).attr("y", H - 10).attr("text-anchor", "middle").text((v) => String(v));
+    const ex = x(2024 + 309 / 366);
+    svg.append("line").attr("x1", ex).attr("x2", ex).attr("y1", m.t).attr("y2", H - m.b).style("stroke", "var(--ink-3)").attr("stroke-dasharray", "3,3");
+    svg.append("text").attr("x", ex - 4).attr("y", m.t + 8).attr("text-anchor", "end").style("fill", "var(--ink-3)").text("Nov. 2024 election");
+    const ln = d3.line().x((p) => x(p.year + 0.5)).y((p) => y(p.v));
+    series.forEach((s) => {
+      svg.append("path").attr("d", ln(s.pts)).attr("fill", "none").style("stroke", gcol(s.g)).attr("stroke-width", 2).attr("stroke-linejoin", "round");
+      svg.append("g").selectAll("circle").data(s.pts).join("circle").attr("cx", (p) => x(p.year + 0.5)).attr("cy", (p) => y(p.v)).attr("r", 3)
+        .style("fill", (p) => (p.year === 2026 ? "var(--surface)" : gcol(s.g))).style("stroke", gcol(s.g)).attr("stroke-width", 1.5);
+      if (opts.labels !== false) { const lp = s.pts[s.pts.length - 1]; svg.append("text").attr("x", x(lp.year + 0.5) + 6).attr("y", y(lp.v)).attr("dy", "0.35em").style("fill", gcol(s.g)).style("font-weight", 600).text(G[s.g].short); }
+    });
+    const rule = svg.append("line").attr("y1", m.t).attr("y2", H - m.b).style("stroke", "var(--ink-3)").attr("opacity", 0);
+    svg.append("rect").attr("x", m.l).attr("y", m.t).attr("width", W - m.l - m.r).attr("height", H - m.t - m.b).attr("fill", "transparent")
+      .on("mousemove", (ev) => {
+        const [mx] = d3.pointer(ev); const yr = Math.floor(x.invert(mx));
+        const lines = series.map((s) => { const p = s.pts.find((q) => q.year === yr); return p ? `${G[s.g].label}: ${fv(D, p.v)} (${p.n} shows)` : null; }).filter(Boolean);
+        if (!lines.length) { hideTip(); rule.attr("opacity", 0); return; }
+        rule.attr("x1", x(yr + 0.5)).attr("x2", x(yr + 0.5)).attr("opacity", 1);
+        showTip(ev, String(yr) + (yr === 2026 ? " (partial year)" : ""), lines);
+      }).on("mouseleave", () => { hideTip(); rule.attr("opacity", 0); });
+  }
+  const lineToggles = () => el("div", { class: "row" }, ...[["all", "Manosphere, all"], ["trump", "Trump interviews"], ["political", "Political benchmark"], ["control", "Control"]].map(([g, l]) =>
+    el("button", { type: "button", class: "chip", "aria-pressed": String(state.lines[g]), onclick: () => { state.lines[g] = !state.lines[g]; render(); } }, el("i", { class: "sw", style: `background:${gcol(g)}` }), l)));
+
+  // ------------------------------------------------------------ heatmap (show x year)
+  function heatmap(host, D, mid) {
+    const SY = D.showyears, years = d3.range(2006, 2027);
+    const order = [];
+    ["trump", "other", "political", "control"].forEach((g) => {
+      const ss = D.shows.filter((s) => s.group === g).map((s) => ({ ...s, r: (D.rates.all[mid] || {})[s.key] || 0 })).sort((a, b) => b.r - a.r);
+      order.push(...ss);
+    });
+    const vals = [];
+    order.forEach((s) => { const e = SY[s.key]; if (!e) return; e.years.forEach((yv, i) => { if (e[mid][i] > 0) vals.push(syv(D, e, mid, i)); }); });
+    const W = Math.max(520, host.clientWidth || 900), left = 196, cw = (W - left - 6) / years.length, rh = 17, top = 4, gap = 10;
+    const groupsOrder = ["trump", "other", "political", "control"];
+    const H = top + order.length * rh + 3 * gap + 26;
+    const svg = d3.select(host).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("height", H);
+    const op = d3.scaleLog([d3.quantile(vals.sort(d3.ascending), 0.05) || 1e-3, d3.max(vals) || 1], [0.14, 1]).clamp(true);
+    let yy = top, prev = null;
+    order.forEach((s) => {
+      if (prev && prev !== s.group) yy += gap; prev = s.group;
+      svg.append("text").attr("x", left - 8).attr("y", yy + rh / 2).attr("dy", "0.35em").attr("text-anchor", "end").style("fill", "var(--ink)").style("cursor", "pointer").text(s.name)
+        .on("click", () => { state.show = s.key; state.sub = "shows"; render(); });
+      const e = SY[s.key];
+      if (e) e.years.forEach((yv, i) => {
+        const xi = years.indexOf(yv); if (xi < 0) return;
+        const r = syv(D, e, mid, i);
+        svg.append("rect").attr("x", left + xi * cw + 1).attr("y", yy + 1.5).attr("width", cw - 2).attr("height", rh - 3).attr("rx", 2)
+          .style("fill", e[mid][i] > 0 ? gcol(s.group) : "var(--surface)").attr("fill-opacity", e[mid][i] > 0 ? op(r) : 1)
+          .style("stroke", e[mid][i] > 0 ? "none" : "var(--line)")
+          .on("mousemove", (ev) => showTip(ev, `${s.name}, ${yv}`, [isT(D) ? `${fv(D, r)} of talk` : `${fmt(r)} per 10,000 words`, isT(D) ? `about ${fmtInt(e.words[i])} words` : `${fmtInt(e[mid][i])} matches in ${fmtInt(e.words[i])} words`, e.words[i] < 100000 ? "Under 100,000 words: noisy" : ""].filter(Boolean)))
+          .on("mouseleave", hideTip);
+      });
+      yy += rh;
+    });
+    const ex = left + (2024 + 309 / 366 - 2006) * cw;
+    svg.append("line").attr("x1", ex).attr("x2", ex).attr("y1", top).attr("y2", yy).style("stroke", "var(--ink-3)").attr("stroke-dasharray", "3,3");
+    svg.append("g").selectAll("text").data(years).join("text").attr("x", (v, i) => left + i * cw + cw / 2).attr("y", yy + 16).attr("text-anchor", "middle").text((v) => (cw < 26 && v % 2 ? "" : "’" + String(v).slice(2)));
+  }
+
+  // ------------------------------------------------------------ 3. Over time
+  function time(panel, D) {
+    const c = el("div", { class: "card" }, el("h3", { text: `${D.name}: average show rate by year` }), lineToggles());
+    const host = el("div"); c.append(host, el("p", { class: "note", text: "Each point is a calendar year (plotted at mid-year). A group appears in years with at least three shows that have 100,000+ words. Hollow points are 2026, a partial year. The set of shows grows over time, so early years rest on few shows." }));
+    panel.append(c);
+    lineChart(host, D, D.total);
+    const c2 = el("div", { class: "card" }, el("h3", { text: "Each show, year by year" }));
+    const h2 = el("div", { class: "tbl-wrap" }); c2.append(h2, el("p", { class: "note", text: "Hue marks the show’s group; darker cells mean higher rates (log scale). Outlined cells are years with episodes but no matches; blank cells are years with no episodes in the corpus. Hover for counts; click a show name to open it." }));
+    panel.append(c2);
+    heatmap(h2, D, D.total);
+  }
+
+  // ------------------------------------------------------------ 4. Over time by subgroup
+  function timesub(panel, D) {
+    panel.append(el("div", { class: "row" }, isT(D) ? levelCtl() : null, lineToggles()));
+    const grid = el("div", { class: "grid-sm" });
+    panel.append(grid);
+    D.measures.filter((m) => m.id !== D.total).forEach((m) => {
+      const c = el("div", { class: "card" }, el("h3", {}, m.label, m.kind === "format" ? el("span", { class: "tag", text: "format" }) : null));
+      const host = el("div"); c.append(host); grid.append(c);
+      lineChart(host, D, m.id, { h: 200, labels: false });
+    });
+    panel.append(el("p", { class: "note", text: `Same rules as the Over time tab: group averages of show ${isT(D) ? "shares" : "rates"} by year, groups shown where at least three shows have 100,000+ words. Each panel has its own scale. Hover for values.` }));
+  }
+
+  // ------------------------------------------------------------ 5. Shows
+  function shows(panel, D) {
+    const opts = [["trump", "Manosphere: Trump-interview shows"], ["other", "Manosphere: other shows"], ["political", "Political benchmark"], ["control", "Mainstream control podcasts"]];
+    if (!state.show) state.show = D.shows.filter((s) => s.group !== "control" && s.group !== "political").sort((a, b) => (D.rates.all[D.total][b.key] || 0) - (D.rates.all[D.total][a.key] || 0))[0].key;
+    const sel = el("select", { id: "showsel", "aria-label": "Show", onchange: (e) => { state.show = e.target.value; render(); } },
+      ...opts.map(([g, l]) => el("optgroup", { label: l }, ...D.shows.filter((s) => s.group === g).sort((a, b) => a.name.localeCompare(b.name)).map((s) => el("option", { value: s.key, ...(s.key === state.show ? { selected: "" } : {}) }, s.name)))));
+    panel.append(el("div", { class: "controls" }, el("span", { class: "note", text: "Show" }), sel));
+    const S = D.shows.find((s) => s.key === state.show);
+    const r = (mid, p = "all") => (D.rates[p][mid] || {})[S.key];
+    panel.append(el("div", { class: "card showhead" },
+      el("div", { class: "row" }, el("h2", { text: S.name }), el("span", { class: "chip" }, el("i", { class: "sw", style: `background:${gcol(S.group)}` }), { trump: "Manosphere · Trump interview", other: "Manosphere", political: "Political benchmark", control: "Mainstream control" }[S.group])),
+      el("p", { class: "note", text: [S.host, S.desc].filter(Boolean).join(" · ") }),
+      el("p", { class: "note", text: `${S.first}–${S.last} · ${fmtInt(S.episodes)} episodes · ${fmtInt(S.words)} words in the corpus` })));
+    // rate vs groups
+    const g = D.groups.all;
+    const grid = el("div", { class: "grid2" });
+    const c1 = el("div", { class: "card" }, el("h3", { text: `${D.name} rate vs. group averages (all years)` }));
+    const h1 = el("div"); c1.append(h1); grid.append(c1);
+    const items = [[S.name, r(D.total), S.group, true], ["Manosphere average", g[D.total].all.mean, "all"], ["Trump-interview average", g[D.total].trump.mean, "trump"], ["Political benchmark average", g[D.total].political.mean, "political"], ["Control average", g[D.total].control.mean, "control"]];
+    barList(h1, items);
+    // subgroups
+    const c2 = el("div", { class: "card" }, el("h3", { text: `By ${D.sublabel} (per 10,000 words)` }));
+    const tb = el("table");
+    tb.append(el("thead", {}, el("tr", {}, el("th", { text: "" }), el("th", { class: "n", text: "This show" }), el("th", { class: "n", text: "Manosphere avg." }), el("th", { class: "n", text: "Control avg." }))));
+    const body = el("tbody");
+    D.measures.forEach((m) => body.append(el("tr", {}, el("td", {}, m.id === D.total ? el("b", { text: "Total" }) : m.label), el("td", { class: "n", text: fmt(r(m.id)) }), el("td", { class: "n", text: fmt(g[m.id].all.mean) }), el("td", { class: "n", text: fmt(g[m.id].control.mean) }))));
+    tb.append(body); c2.append(el("div", { class: "tbl-wrap" }, tb)); grid.append(c2);
+    panel.append(grid);
+    // over time
+    const c3 = el("div", { class: "card" }, el("h3", { text: "Over time" }));
+    const ctl = el("select", { id: "showmeas", "aria-label": "Measure" }, ...D.measures.map((m) => el("option", { value: m.id }, m.id === D.total ? `${D.name} total` : m.label)));
+    const h3 = el("div");
+    c3.append(el("div", { class: "controls" }, ctl), h3, el("p", { class: "note", text: "Hollow points are years with under 100,000 words (noisy). The dashed line is the manosphere group average for that year." }));
+    panel.append(c3);
+    const drawShowTime = () => { h3.replaceChildren(); showTime(h3, D, S, ctl.value); };
+    ctl.addEventListener("change", drawShowTime);
+    drawShowTime();
+    // top words
+    const c4 = el("div", { class: "card" }, el("h3", { text: "Most frequent terms in this show" }));
+    const tw = D.showterms[S.key] || [];
+    if (!tw.length) c4.append(el("p", { class: "note", text: "No matches in this show." }));
+    else {
+      const t4 = el("table");
+      t4.append(el("thead", {}, el("tr", {}, el("th", { text: "Term" }), el("th", { class: "n", text: "Matches" }), el("th", { class: "n", text: "Per million words" }))));
+      const b4 = el("tbody");
+      tw.forEach(([term, key, h, pm]) => b4.append(el("tr", { class: "click", title: "See examples", onclick: () => { state.term = term; state.sub = "terms"; state.termq = ""; state.termsub = ""; render(); } }, el("td", { text: term }), el("td", { class: "n", text: fmtInt(h) }), el("td", { class: "n", text: fmt(pm) }))));
+      t4.append(b4);
+      c4.append(el("div", { class: "tbl-wrap" }, t4), el("p", { class: "note", text: "Click a term to see examples in context." }));
+    }
+    panel.append(c4);
+  }
+  function barList(host, items) {
+    const W = Math.max(280, host.clientWidth || 480), rh = 30, left = 190, H = items.length * rh + 8;
+    const svg = d3.select(host).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("height", H);
+    const mx = d3.max(items, (d) => d[1] || 0) || 1;
+    const x = d3.scaleLinear([0, mx * 1.15], [left, W - 56]);
+    items.forEach(([lab, v, g, own], i) => {
+      const y = i * rh + 4;
+      svg.append("text").attr("x", left - 8).attr("y", y + rh / 2 - 2).attr("dy", "0.35em").attr("text-anchor", "end").style("fill", "var(--ink)").style("font-weight", own ? 600 : 400).text(lab);
+      svg.append("rect").attr("x", left).attr("y", y + 4).attr("height", rh - 14).attr("width", Math.max(0, x(v || 0) - left)).attr("rx", 3).style("fill", gcol(g)).attr("fill-opacity", own ? 1 : 0.55);
+      svg.append("text").attr("x", x(v || 0) + 6).attr("y", y + rh / 2 - 2).attr("dy", "0.35em").style("font-family", "var(--f-mono)").text(fmt(v));
+    });
+  }
+  function showTime(host, D, S, mid) {
+    const e = D.showyears[S.key];
+    if (!e) { host.append(el("p", { class: "note", text: "No yearly data." })); return; }
+    const pts = e.years.map((yv, i) => ({ year: yv, v: syv(D, e, mid, i), w: e.words[i], h: e[mid][i] }));
+    const ref = ((D.years[mid] || {}).mano || []).filter((p) => p[2] >= 3).map((p) => ({ year: p[0], v: p[1] }));
+    const W = Math.max(300, host.clientWidth || 700), H = 240, m = { t: 12, r: 16, b: 28, l: 46 };
+    const svg = d3.select(host).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("height", H);
+    const x0 = Math.min(d3.min(pts, (p) => p.year), 2015), x = d3.scaleLinear([x0, 2027], [m.l, W - m.r]);
+    const y = d3.scaleLinear([0, (d3.max([...pts, ...ref], (p) => p.v) || 1) * 1.1], [H - m.b, m.t]).nice();
+    svg.append("g").attr("class", "grid").selectAll("line").data(y.ticks(4)).join("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y).attr("y2", y);
+    svg.append("g").selectAll("text").data(y.ticks(4)).join("text").attr("x", m.l - 6).attr("y", y).attr("dy", "0.35em").attr("text-anchor", "end").text((v) => d3.format("~g")(v) + (isT(D) ? "%" : ""));
+    svg.append("g").selectAll("text").data(d3.range(Math.ceil(x0 / 2) * 2, 2027, 2)).join("text").attr("x", (v) => x(v + 0.5)).attr("y", H - 8).attr("text-anchor", "middle").text((v) => String(v));
+    const ex = x(2024 + 309 / 366);
+    svg.append("line").attr("x1", ex).attr("x2", ex).attr("y1", m.t).attr("y2", H - m.b).style("stroke", "var(--ink-3)").attr("stroke-dasharray", "3,3");
+    const ln = d3.line().x((p) => x(p.year + 0.5)).y((p) => y(p.v));
+    if (ref.length) svg.append("path").attr("d", ln(ref)).attr("fill", "none").style("stroke", "var(--ink-3)").attr("stroke-dasharray", "4,3").attr("stroke-width", 1.5);
+    svg.append("path").attr("d", ln(pts)).attr("fill", "none").style("stroke", gcol(S.group)).attr("stroke-width", 2);
+    svg.append("g").selectAll("circle").data(pts).join("circle").attr("cx", (p) => x(p.year + 0.5)).attr("cy", (p) => y(p.v)).attr("r", 4)
+      .style("fill", (p) => (p.w < 100000 ? "var(--surface)" : gcol(S.group))).style("stroke", gcol(S.group)).attr("stroke-width", 1.5)
+      .on("mousemove", (ev, p) => showTip(ev, `${S.name}, ${p.year}`, isT(D) ? [`${fv(D, p.v)} of talk`, `about ${fmtInt(p.w)} words`] : [`${fmt(p.v)} per 10,000 words`, `${fmtInt(p.h)} matches in ${fmtInt(p.w)} words`])).on("mouseleave", hideTip);
+  }
+
+  // ------------------------------------------------------------ 6. Terms & examples
+  async function terms(panel, D) {
+    const K = await loadK(state.lex);
+    if (state.lex === "misogyny") panel.append(el("p", { class: "warn", text: "Content note: this lexicon and its examples include slurs and explicit language quoted from the transcripts." }));
+    const subs = [...new Set(D.terms.flatMap((t) => t.sub))].filter(Boolean).sort();
+    const q = el("input", { type: "search", id: "termq", placeholder: "Search terms", value: state.termq, "aria-label": "Search terms" });
+    const sf = el("select", { id: "termsub", "aria-label": D.sublabel }, el("option", { value: "" }, `All ${D.sublabel === "community" ? "communities" : D.sublabel + "s"}`), ...subs.map((s) => el("option", { value: s, ...(s === state.termsub ? { selected: "" } : {}) }, s)));
+    const used = el("label", { class: "chk" }, el("input", { type: "checkbox", id: "termused", ...(state.termUsed ? { checked: "" } : {}) }), "Only terms that occur in the corpus");
+    const nUsed = D.terms.filter((t) => t.h_all + t.h_control + t.h_political > 0).length;
+    panel.append(el("div", { class: "controls" }, q, sf, used, el("span", { class: "note", text: `${nUsed} of ${fmtInt(D.terms.length)} terms occur at least once` })));
+    const lay = el("div", { class: "terms-layout" });
+    const left = el("div", { class: "card" }), right = el("div", { class: "card" });
+    lay.append(left, right); panel.append(lay);
+    const cols = [["term", "Term"], ["sub", D.sublabel[0].toUpperCase() + D.sublabel.slice(1)], ["h_all", "Manosphere matches", 1], ["pm_all", "Manosphere", 1], ["pm_trump", "Trump", 1], ["pm_political", "Political benchmark", 1], ["pm_control", "Control", 1], ["s_all", "Shows (of 19)", 1]];
+    const drawTable = () => {
+      let rows = D.terms.filter((t) => (!state.termUsed || t.h_all + t.h_control + t.h_political > 0) && (!state.termsub || t.sub.includes(state.termsub)) && (!state.termq || t.term.toLowerCase().includes(state.termq.toLowerCase())));
+      const [k, dir] = state.termSort;
+      rows = rows.slice().sort((a, b) => { const va = k === "sub" ? a.sub.join() : a[k], vb = k === "sub" ? b.sub.join() : b[k]; return (typeof va === "string" ? va.localeCompare(vb) : va - vb) * dir; });
+      const tb = el("table");
+      tb.append(el("thead", {}, el("tr", {}, ...cols.map(([key, lab, num]) => el("th", { class: "sort" + (num ? " n" : ""), onclick: () => { state.termSort = [key, state.termSort[0] === key ? -state.termSort[1] : num ? -1 : 1]; drawTable(); } }, lab)))));
+      const body = el("tbody");
+      rows.slice(0, 600).forEach((t) => body.append(el("tr", { class: "click" + (t.term === state.term ? " sel" : ""), onclick: () => { state.term = t.term; state.kwGroup = ""; drawTable(); drawEx(); } },
+        el("td", {}, el("b", { text: t.term })), el("td", { text: t.sub.join("; ") }), el("td", { class: "n", text: fmtInt(t.h_all) }), el("td", { class: "n", text: fmt(t.pm_all) }), el("td", { class: "n", text: fmt(t.pm_trump) }),
+        el("td", { class: "n", text: fmt(t.pm_political) }), el("td", { class: "n", text: fmt(t.pm_control) }), el("td", { class: "n", text: String(t.s_all) }))));
+      tb.append(body);
+      left.replaceChildren(el("h3", { text: `${rows.length} terms` }), el("div", { class: "terms-scroll" }, tb), el("p", { class: "note", text: "Rates are matches per million words, pooled across each group’s shows. Click a column to sort; click a term to see examples." + (rows.length > 600 ? " Showing the first 600; search to narrow." : "") }));
+    };
+    const drawEx = () => {
+      const t = D.terms.find((x) => x.term === state.term);
+      if (!t) { rc(right, el("h3", { text: "Examples" }), el("p", { class: "note", text: "Select a term to see where it appears." })); return; }
+      const ex = (K[t.term] || []);
+      const groupsHere = [...new Set(ex.map((e) => e[1]))];
+      const shown = ex.filter((e) => !state.kwGroup || e[1] === state.kwGroup);
+      const chips = el("div", { class: "row" }, el("button", { type: "button", class: "chip", "aria-pressed": String(!state.kwGroup), onclick: () => { state.kwGroup = ""; drawEx(); } }, `All (${ex.length})`),
+        ...["trump", "other", "political", "control"].filter((g) => groupsHere.includes(g)).map((g) => el("button", { type: "button", class: "chip", "aria-pressed": String(state.kwGroup === g), onclick: () => { state.kwGroup = g; drawEx(); } }, el("i", { class: "sw", style: `background:${gcol(g)}` }), `${G[g].label} (${ex.filter((e) => e[1] === g).length})`)));
+      const list = el("div", { class: "kwic" }, ...shown.map(([show, g, date, title, ctx]) => {
+        const c = el("div", { class: "ctx" });
+        ctx.split(/\[\[(.+?)\]\]/).forEach((part, i) => c.append(i % 2 ? el("mark", { text: part }) : document.createTextNode(part)));
+        return el("div", { class: "kw", style: `border-left-color:${gcol(g)}` }, el("div", { class: "meta" }, el("b", { text: show }), date ? el("span", { text: date }) : null, title ? el("span", { text: title }) : null), c);
+      }));
+      const top = t.top.length ? `Most in: ${t.top.map(([s, h]) => `${s} (${fmtInt(h)})`).join(", ")}.` : "";
+      rc(right, el("h2", { text: t.term }),
+        el("p", { class: "note", text: `${t.sub.join("; ")} · ${fmtInt(t.h_all)} matches in ${t.s_all} of 19 manosphere shows (${fmt(t.pm_all)} per million words) vs. ${fmt(t.pm_control)} in control and ${fmt(t.pm_political)} in the political benchmark. ${top}` }),
+        ex.length ? chips : null,
+        ex.length ? list : el("p", { class: "note", text: "This term does not occur in the corpus." }),
+        ex.length ? el("p", { class: "note", text: "A sample of matches spread across shows (up to " + ({ listn: 40, krendel: 60, misogyny: 30 }[state.lex]) + " per term), from automated transcripts. Each one counts as a match whatever its meaning, so read them for endorsement, jokes, reporting and unrelated senses." }) : null);
+    };
+    q.addEventListener("input", () => { state.termq = q.value; drawTable(); });
+    sf.addEventListener("change", () => { state.termsub = sf.value; drawTable(); });
+    used.querySelector("input").addEventListener("change", (e) => { state.termUsed = e.target.checked; drawTable(); });
+    if (!state.term || !D.terms.some((x) => x.term === state.term)) state.term = D.terms.slice().sort((a, b) => b.h_all - a.h_all)[0].term;
+    drawTable(); drawEx();
+  }
+
+  // ------------------------------------------------------------ Topics tab
+  const levelCtl = () => el("div", { class: "row" }, el("span", { class: "note", text: "Resolution" }), seg([[12, "12 themes"], [30, "30 topics"]], state.tlevel, (v) => { state.tlevel = v; state.topic = null; render(); }));
+  const topicSel = (D, on) => el("select", { "aria-label": "Topic", onchange: (e) => { state.topic = e.target.value; if (on) on(); else render(); } },
+    ...D.measures.map((m) => el("option", { value: m.id, ...(m.id === state.topic ? { selected: "" } : {}) }, m.label + (m.kind === "format" ? " (format)" : ""))));
+  const tm = (D, id) => D.measures.find((m) => m.id === id);
+  const fmtTag = (m) => (m.kind === "format" ? el("span", { class: "tag", title: "Captures show format (ads, segments, sign-offs) rather than a subject", text: "format" }) : null);
+  const PROV = "Topic labels are my provisional reading of each topic’s top words and passages; “format” topics capture show format (ads, segments, sign-offs) rather than a subject.";
+  const KEYG = ["trump", "other", "political", "control"];
+
+  function topicDots(host, D, P) {
+    const gk = state.noff ? "all_noff" : "all", g = D.groups[P];
+    const ms = D.measures.filter((m) => g[m.id]).slice().sort((a, b) => g[b.id][gk].mean - g[a.id][gk].mean);
+    const W = Math.max(340, host.clientWidth || 800), left = Math.min(250, Math.round(W * 0.42)), right = 18, rh = 24, top = 4, H = top + ms.length * rh + 26;
+    const mx = d3.max(ms, (m) => d3.max([gk, ...KEYG], (k) => g[m.id][k].mean || 0));
+    const x = d3.scaleLinear([0, mx * 1.04], [left, W - right]).nice();
+    const svg = d3.select(host).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("height", H).attr("role", "img").attr("aria-label", "Group averages by topic");
+    const yEnd = top + ms.length * rh;
+    svg.append("g").attr("class", "grid").selectAll("line").data(x.ticks(6)).join("line").attr("x1", x).attr("x2", x).attr("y1", top).attr("y2", yEnd);
+    svg.append("g").selectAll("text").data(x.ticks(6)).join("text").attr("x", x).attr("y", yEnd + 16).attr("text-anchor", "middle").text((t) => t + "%");
+    const maxCh = Math.floor((left - 12) / 6.2);
+    ms.forEach((m, i) => {
+      const y = top + i * rh + rh / 2, gg = g[m.id];
+      if (m.id === state.topic) svg.append("rect").attr("x", 0).attr("y", y - rh / 2).attr("width", W).attr("height", rh).attr("rx", 4).style("fill", "var(--accent-soft)");
+      const lab = m.label.length > maxCh ? m.label.slice(0, maxCh - 1) + "…" : m.label;
+      svg.append("text").attr("x", left - 10).attr("y", y).attr("dy", "0.35em").attr("text-anchor", "end").style("fill", m.kind === "format" ? "var(--ink-3)" : "var(--ink)").style("font-style", m.kind === "format" ? "italic" : null).text(lab);
+      const vs = KEYG.map((k) => gg[k].mean).filter((v) => v !== null);
+      svg.append("line").attr("x1", x(d3.min(vs))).attr("x2", x(d3.max(vs))).attr("y1", y).attr("y2", y).style("stroke", "var(--line)").attr("stroke-width", 2);
+      if (gg[gk].mean !== null) svg.append("line").attr("x1", x(gg[gk].mean)).attr("x2", x(gg[gk].mean)).attr("y1", y - 8).attr("y2", y + 8).style("stroke", "var(--ink)").attr("stroke-width", 2).attr("stroke-linecap", "round");
+      KEYG.forEach((k) => { if (gg[k].mean !== null) svg.append("circle").attr("cx", x(gg[k].mean)).attr("cy", y).attr("r", 4.5).style("fill", gcol(k)).style("stroke", "var(--surface)").attr("stroke-width", 1.2); });
+      svg.append("rect").attr("x", 0).attr("y", y - rh / 2).attr("width", W).attr("height", rh).attr("fill", "transparent").style("cursor", "pointer")
+        .on("mousemove", (ev) => showTip(ev, m.label, [`All manosphere${state.noff ? " (excl. F&F)" : ""}: ${fv(D, gg[gk].mean)}`, ...KEYG.map((k) => `${G[k].label}: ${fv(D, gg[k].mean)}`), "Click to see every show"]))
+        .on("mouseleave", hideTip).on("click", () => { state.topic = m.id; render(); });
+    });
+  }
+
+  function tOverview(panel, D) {
+    const P = state.period, sfx = state.noff ? "_noff" : "", gk = "all" + sfx;
+    panel.append(el("div", { class: "controls" }, levelCtl(), periodCtl(), noffCtl()));
+    const c0 = el("div", { class: "card" }, el("h3", { text: `What the shows talk about · ${D.measures.length} ${D.level === 12 ? "themes" : "topics"}, ${P === "all" ? "all years" : "2024"}` }));
+    const h0 = el("div");
+    c0.append(h0, el("p", { class: "note", text: `Average share of each show’s talk, by group. Colored dots are group averages (red Trump interviews, blue other manosphere, green political benchmark, grey control); the black tick is all ${state.noff ? "18" : "19"} manosphere shows. Rows are sorted by the manosphere average. Click a row to see every show below. ${PROV}` }));
+    panel.append(c0);
+    topicDots(h0, D, P);
+    const m = tm(D, state.topic), t = D.tests[P][m.id], gg = D.groups[P][m.id];
+    const c1 = el("div", { class: "card", id: "topiccard" },
+      el("div", { class: "row" }, el("h2", {}, m.label, fmtTag(m)), topicSel(D)),
+      el("p", { class: "words" }, el("b", { text: "Top words: " }), m.words),
+      el("p", { class: "note", text: `All manosphere ${fv(D, gg[gk].mean)} vs. control ${fv(D, gg.control.mean)} (p ${fmtP(t[`all${sfx}|control`].p)}) and the political benchmark ${fv(D, gg.political.mean)} (p ${fmtP(t[`all${sfx}|political`].p)}).` }));
+    const h1 = el("div");
+    c1.append(h1, el("p", { class: "note", text: "Each dot is one show’s share of talk on this topic; black ticks mark group averages and the dashed blue line the manosphere average. Click a dot to open that show." }));
+    panel.append(c1);
+    dotPlot(h1, D, m.id, P, { noff: state.noff });
+    // table
+    const card = el("div", { class: "card" }, el("h3", { text: "All topics" }));
+    const tb = el("table");
+    tb.append(el("thead", {}, el("tr", {}, el("th", { text: "Topic" }), el("th", { class: "n", text: "Manosphere" }), el("th", { class: "n", text: "Trump" }), el("th", { class: "n", text: "Other" }), el("th", { class: "n", text: "Political benchmark" }), el("th", { class: "n", text: "Control" }), el("th", { class: "n", text: "Ratio" }), el("th", { class: "n", text: "p vs. control" }), el("th", { class: "n", text: "p vs. political benchmark" }))));
+    const body = el("tbody");
+    D.measures.slice().sort((a, b) => D.groups[P][b.id][gk].mean - D.groups[P][a.id][gk].mean).forEach((mm) => {
+      const g2 = D.groups[P][mm.id], t2 = D.tests[P][mm.id], r = g2[gk].mean / g2.control.mean;
+      const pc = (k) => { const x = t2[k]; const sig = x && x.p !== null && x.p < 0.05; return el("td", { class: "n" + (sig ? (x.dir === "higher" ? " sig-hi" : " sig-lo") : ""), text: x ? fmtP(x.p) : "–" }); };
+      body.append(el("tr", { class: "click" + (mm.id === state.topic ? " sel" : ""), onclick: () => { state.topic = mm.id; render().then(() => $("#topiccard")?.scrollIntoView({ behavior: "smooth", block: "start" })); } },
+        el("td", {}, mm.label, fmtTag(mm)), el("td", { class: "n", text: fv(D, g2[gk].mean) }), el("td", { class: "n", text: fv(D, g2.trump.mean) }), el("td", { class: "n", text: fv(D, g2["other" + sfx].mean) }),
+        el("td", { class: "n", text: fv(D, g2.political.mean) }), el("td", { class: "n", text: fv(D, g2.control.mean) }), el("td", { class: "n", text: isFinite(r) ? r.toFixed(1) + "×" : "–" }), pc(`all${sfx}|control`), pc(`all${sfx}|political`)));
+    });
+    tb.append(body);
+    card.append(el("div", { class: "tbl-wrap" }, tb), el("p", { class: "note", text: "Average show shares (percent of talk). Shaded cells differ at p < .05 (blue = manosphere higher, orange = lower), two-sided Mann–Whitney tests on show shares. Shares across topics sum to 100% for each show. Click a row to see every show." }));
+    panel.append(card);
+  }
+
+  function tTime(panel, D) {
+    panel.append(el("div", { class: "controls" }, levelCtl(), el("span", { class: "note", text: "Topic" }), topicSel(D)));
+    const m = tm(D, state.topic);
+    const c = el("div", { class: "card" }, el("h3", {}, `${m.label}: average share of talk by year`, fmtTag(m)), lineToggles());
+    const host = el("div");
+    c.append(host, el("p", { class: "note", text: "Each point is a calendar year (plotted at mid-year): the average of show shares in each group. A group appears in years with at least three shows that have 100,000+ words. Hollow points are 2026, a partial year. The set of shows grows over time, so early years rest on few shows." }));
+    panel.append(c);
+    lineChart(host, D, m.id);
+    const c2 = el("div", { class: "card" }, el("h3", { text: "Each show, year by year" }));
+    const h2 = el("div", { class: "tbl-wrap" });
+    c2.append(h2, el("p", { class: "note", text: "Hue marks the show’s group; darker cells mean a larger share of talk (log scale). Blank cells are years with no episodes in the corpus. Hover for values; click a show name to open it." }));
+    panel.append(c2);
+    heatmap(h2, D, m.id);
+  }
+
+  function profileChart(host, D, S) {
+    const g = D.groups.all, r = (id) => (D.rates.all[id] || {})[S.key];
+    const ms = D.measures.slice().sort((a, b) => (r(b.id) || 0) - (r(a.id) || 0));
+    const W = Math.max(320, host.clientWidth || 700), left = Math.min(240, Math.round(W * 0.4)), right = 52, rh = 24, H = ms.length * rh + 26;
+    const mx = d3.max(ms, (m) => Math.max(r(m.id) || 0, g[m.id].all.mean, g[m.id].control.mean));
+    const x = d3.scaleLinear([0, mx * 1.05], [left, W - right]).nice();
+    const svg = d3.select(host).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("height", H);
+    const yEnd = ms.length * rh;
+    svg.append("g").attr("class", "grid").selectAll("line").data(x.ticks(5)).join("line").attr("x1", x).attr("x2", x).attr("y1", 0).attr("y2", yEnd);
+    svg.append("g").selectAll("text").data(x.ticks(5)).join("text").attr("x", x).attr("y", yEnd + 16).attr("text-anchor", "middle").text((t) => t + "%");
+    const maxCh = Math.floor((left - 12) / 6.2);
+    ms.forEach((m, i) => {
+      const y = i * rh, v = r(m.id) || 0, gg = g[m.id];
+      svg.append("text").attr("x", left - 10).attr("y", y + rh / 2).attr("dy", "0.35em").attr("text-anchor", "end").style("fill", m.kind === "format" ? "var(--ink-3)" : "var(--ink)").style("font-style", m.kind === "format" ? "italic" : null).text(m.label.length > maxCh ? m.label.slice(0, maxCh - 1) + "…" : m.label);
+      svg.append("rect").attr("x", left).attr("y", y + 6).attr("height", rh - 12).attr("width", Math.max(0, x(v) - left)).attr("rx", 3).style("fill", gcol(S.group)).attr("fill-opacity", 0.8);
+      svg.append("line").attr("x1", x(gg.control.mean)).attr("x2", x(gg.control.mean)).attr("y1", y + 3).attr("y2", y + rh - 3).style("stroke", "var(--c-control)").attr("stroke-width", 2.5);
+      svg.append("line").attr("x1", x(gg.all.mean)).attr("x2", x(gg.all.mean)).attr("y1", y + 3).attr("y2", y + rh - 3).style("stroke", "var(--ink)").attr("stroke-width", 2);
+      svg.append("text").attr("x", Math.max(x(v), x(gg.all.mean), x(gg.control.mean)) + 6).attr("y", y + rh / 2).attr("dy", "0.35em").style("font-family", "var(--f-mono)").text(fv(D, v));
+      svg.append("rect").attr("x", 0).attr("y", y).attr("width", W).attr("height", rh).attr("fill", "transparent").style("cursor", "pointer")
+        .on("mousemove", (ev) => showTip(ev, m.label, [`${S.name}: ${fv(D, v)}`, `Manosphere average: ${fv(D, gg.all.mean)}`, `Political benchmark average: ${fv(D, gg.political.mean)}`, `Control average: ${fv(D, gg.control.mean)}`, "Click for example passages"]))
+        .on("mouseleave", hideTip).on("click", () => { state.topic = m.id; state.sub = "terms"; render(); });
+    });
+  }
+
+  const kwLine = (show, g, date, title, ctx, extra) => {
+    const c = el("div", { class: "ctx" });
+    ctx.split(/\[\[(.+?)\]\]/).forEach((part, i) => c.append(i % 2 ? el("mark", { text: part.trim() }) : document.createTextNode(part)));
+    return el("div", { class: "kw", style: `border-left-color:${g ? gcol(g) : "var(--line)"}` }, el("div", { class: "meta" }, el("b", { text: show }), date ? el("span", { text: date }) : null, title ? el("span", { text: title }) : null, extra ? el("span", { text: extra }) : null), c);
+  };
+  const groupOfName = (D, name) => D.shows.find((s) => s.name === name)?.group;
+
+  async function tShows(panel, D) {
+    const X = await loadX();
+    const opts = [["trump", "Manosphere: Trump-interview shows"], ["other", "Manosphere: other shows"], ["political", "Political benchmark"], ["control", "Mainstream control podcasts"]];
+    if (!state.show) state.show = D.shows.filter((s) => s.group === "trump" || s.group === "other").sort((a, b) => (D.rates.all[state.topic][b.key] || 0) - (D.rates.all[state.topic][a.key] || 0))[0].key;
+    const sel = el("select", { id: "showsel", "aria-label": "Show", onchange: (e) => { state.show = e.target.value; render(); } },
+      ...opts.map(([g, l]) => el("optgroup", { label: l }, ...D.shows.filter((s) => s.group === g).sort((a, b) => a.name.localeCompare(b.name)).map((s) => el("option", { value: s.key, ...(s.key === state.show ? { selected: "" } : {}) }, s.name)))));
+    panel.append(el("div", { class: "controls" }, levelCtl(), el("span", { class: "note", text: "Show" }), sel));
+    const S = D.shows.find((s) => s.key === state.show);
+    panel.append(el("div", { class: "card showhead" },
+      el("div", { class: "row" }, el("h2", { text: S.name }), el("span", { class: "chip" }, el("i", { class: "sw", style: `background:${gcol(S.group)}` }), { trump: "Manosphere · Trump interview", other: "Manosphere", political: "Political benchmark", control: "Mainstream control" }[S.group])),
+      el("p", { class: "note", text: [S.host, S.desc].filter(Boolean).join(" · ") }),
+      el("p", { class: "note", text: `${S.first}–${S.last} · ${fmtInt(S.episodes)} episodes · ${fmtInt(S.words)} words in the corpus` })));
+    const c1 = el("div", { class: "card" }, el("h3", { text: "Topic profile (all years)" }));
+    const h1 = el("div");
+    c1.append(h1, el("p", { class: "note", text: "Bars: this show’s share of talk on each topic. Black tick: manosphere average; grey tick: mainstream control average. Click a topic for example passages." }));
+    panel.append(c1);
+    profileChart(h1, D, S);
+    const c3 = el("div", { class: "card" }, el("h3", { text: "Over time" }));
+    const h3 = el("div");
+    const ts = topicSel(D, () => { h3.replaceChildren(); showTime(h3, D, S, state.topic); });
+    c3.append(el("div", { class: "controls" }, ts), h3, el("p", { class: "note", text: "Hollow points are years with under 100,000 words (noisy). The dashed line is the manosphere group average for that year." }));
+    panel.append(c3);
+    showTime(h3, D, S, state.topic);
+    // distinctive words
+    const c4 = el("div", { class: "card" }, el("h3", { text: "Words that set this show apart" }));
+    const K = X.keyness[`show:${S.key}`], KW = X.kwic[`show:${S.key}`] || {};
+    if (!K) c4.append(el("p", { class: "note", text: "Distinctive words were computed for the manosphere shows only." }));
+    else {
+      let cur = state.word && KW[state.word] ? state.word : Object.keys(KW).sort((a, b) => K.A.words.findIndex((w) => w[0] === a) - K.A.words.findIndex((w) => w[0] === b))[0];
+      const chips = el("div", { class: "wordchips" }), ex = el("div", { class: "kwic" });
+      const draw = () => {
+        chips.replaceChildren(...K.A.words.map(([w, z, pa, pb]) => KW[w]
+          ? el("button", { type: "button", class: "chip", "aria-pressed": String(w === cur), title: `${fmt(pa)} vs. ${fmt(pb)} per 10,000 words`, onclick: () => { cur = w; draw(); } }, w)
+          : el("span", { class: "chip", style: "opacity:.75", title: `${fmt(pa)} vs. ${fmt(pb)} per 10,000 words` }, w)));
+        ex.replaceChildren(...(KW[cur] || []).map(([show, date, title, ctx]) => kwLine(show, S.group, date, title, ctx)));
+      };
+      draw();
+      c4.append(chips, ex, el("p", { class: "note", text: "The 25 words most over-used in this show relative to the other manosphere shows (Fightin’ Words log-odds, pooled word counts), in rank order. Profanity was kept here, so it often tops the list. Click a word for example lines." }));
+    }
+    panel.append(c4);
+  }
+
+  async function tTerms(panel, D) {
+    const X = await loadX();
+    panel.append(el("div", { class: "controls" }, levelCtl(), el("span", { class: "note", text: PROV })));
+    const lay = el("div", { class: "terms-layout" }), left = el("div", { class: "card" }), right = el("div", { class: "card" });
+    lay.append(left, right); panel.append(lay);
+    const g = D.groups.all, t = D.tests.all;
+    const drawTable = () => {
+      const tb = el("table");
+      tb.append(el("thead", {}, el("tr", {}, el("th", { text: "Topic" }), el("th", { class: "n", text: "Manosphere" }), el("th", { class: "n", text: "Trump" }), el("th", { class: "n", text: "Political benchmark" }), el("th", { class: "n", text: "Control" }))));
+      const body = el("tbody");
+      D.measures.slice().sort((a, b) => g[b.id].all.mean - g[a.id].all.mean).forEach((m) => body.append(el("tr", { class: "click" + (m.id === state.topic ? " sel" : ""), onclick: () => { state.topic = m.id; state.kwGroup = ""; drawTable(); drawEx(); } },
+        el("td", {}, el("b", { text: m.label }), fmtTag(m), el("div", { class: "words", text: m.words.split(", ").slice(0, 6).join(", ") })),
+        el("td", { class: "n", text: fv(D, g[m.id].all.mean) }), el("td", { class: "n", text: fv(D, g[m.id].trump.mean) }), el("td", { class: "n", text: fv(D, g[m.id].political.mean) }), el("td", { class: "n", text: fv(D, g[m.id].control.mean) }))));
+      tb.append(body);
+      left.replaceChildren(el("h3", { text: `${D.measures.length} ${D.level === 12 ? "themes" : "topics"}` }), el("div", { class: "terms-scroll" }, tb), el("p", { class: "note", text: "Average share of talk across each group’s shows, all years. Click a topic to read passages." }));
+    };
+    const drawEx = () => {
+      const m = tm(D, state.topic), ps = X.passages[m.id] || [];
+      const words = [...new Set([...m.words.split(", "), ...m.frex.split(", ")])].filter((w) => w.length > 2);
+      const re = new RegExp(`\\b(${words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})\\b`, "gi");
+      const groupsHere = [...new Set(ps.map((p) => p[1]))];
+      const shown = ps.filter((p) => !state.kwGroup || p[1] === state.kwGroup);
+      const chips = el("div", { class: "row" }, el("button", { type: "button", class: "chip", "aria-pressed": String(!state.kwGroup), onclick: () => { state.kwGroup = ""; drawEx(); } }, `All (${ps.length})`),
+        ...["trump", "other"].filter((k) => groupsHere.includes(k)).map((k) => el("button", { type: "button", class: "chip", "aria-pressed": String(state.kwGroup === k), onclick: () => { state.kwGroup = k; drawEx(); } }, el("i", { class: "sw", style: `background:${gcol(k)}` }), `${G[k].label} (${ps.filter((p) => p[1] === k).length})`)));
+      const list = el("div", { class: "kwic" }, ...shown.map(([show, gg, date, title, share, text]) => {
+        const c = el("div", { class: "ctx" });
+        text.split(re).forEach((part, i) => c.append(i % 2 ? el("mark", { text: part }) : document.createTextNode(part)));
+        return el("div", { class: "kw", style: `border-left-color:${gcol(gg)}` }, el("div", { class: "meta" }, el("b", { text: show }), date ? el("span", { text: date }) : null, title ? el("span", { text: title }) : null, el("span", { text: `${Math.round(share * 100)}% this topic` })), c);
+      }));
+      const parent = m.parent ? el("p", { class: "note", text: `Part of the broader theme “${m.parent}.”` }) : null;
+      const pc = t[m.id]["all|control"], pp = t[m.id]["all|political"];
+      rc(right, el("h2", {}, m.label, fmtTag(m)), parent,
+        el("p", { class: "words" }, el("b", { text: "Top words: " }), m.words),
+        el("p", { class: "words" }, el("b", { text: "Most distinctive (FREX): " }), m.frex),
+        el("p", { class: "note", text: `${fv(D, g[m.id].all.mean)} of the average manosphere show’s talk vs. ${fv(D, g[m.id].control.mean)} in control (p ${fmtP(pc.p)}) and ${fv(D, g[m.id].political.mean)} in the political benchmark (p ${fmtP(pp.p)}).` }),
+        ps.length ? chips : null,
+        ps.length ? list : el("p", { class: "note", text: "No passages were pulled for this topic." }),
+        el("p", { class: "note", text: "Passages are 250-word chunks from the manosphere shows where this topic carries the most weight (at most one per episode and two per show). Highlighted words are the topic’s top and distinctive words." }));
+    };
+    drawTable(); drawEx();
+  }
+
+  const WCOMP = { mano_vs_control: ["Manosphere vs. control", "Manosphere", "Mainstream control", "all", "control"], mano_vs_political: ["Manosphere vs. political benchmark", "Manosphere", "Political benchmark", "all", "political"], trump_vs_nontrump: ["Trump interviews vs. other manosphere", "Trump-interview shows", "Other manosphere", "trump", "other"] };
+  async function tWords(panel, D) {
+    const X = await loadX();
+    const [_, la, lb, ga, gb] = WCOMP[state.wcomp];
+    panel.append(el("div", { class: "controls" }, el("span", { class: "note", text: "Compare" }), seg(Object.entries(WCOMP).map(([k, v]) => [k, v[0]]), state.wcomp, (v) => { state.wcomp = v; state.word = null; render(); })));
+    panel.append(el("p", { class: "warn", text: "Content note: profanity was kept for this comparison, so the lists and examples include explicit language." }));
+    const K = X.keyness[state.wcomp], KW = X.kwic[state.wcomp] || {};
+    if (!state.word || !KW[state.word]) state.word = K.A.words.find((w) => KW[w[0]])[0];
+    const ex = el("div", { class: "card" });
+    const grid = el("div", { class: "grid2" });
+    const side = (S, lab, g, mine) => {
+      const tb = el("table");
+      tb.append(el("thead", {}, el("tr", {}, el("th", { class: "n", text: "#" }), el("th", { text: "Word" }), el("th", { class: "n", text: "z" }), el("th", { class: "n", text: `${la}` }), el("th", { class: "n", text: `${lb}` }))));
+      tb.append(el("tbody", {}, ...S.words.map(([w, z, pa, pb], i) => el("tr", { class: (KW[w] ? "click" : "") + (w === state.word ? " sel" : ""), onclick: KW[w] ? () => { state.word = w; render(); } : null },
+        el("td", { class: "n", text: String(i + 1) }), el("td", {}, el("b", { text: w })), el("td", { class: "n", text: fmt(z) }), el("td", { class: "n", text: fmt(pa) }), el("td", { class: "n", text: fmt(pb) })))));
+      return el("div", { class: "card" }, el("h3", {}, el("span", { class: "row", style: "gap:6px" }, el("i", { class: "sw", style: `background:${gcol(g)}` }), `Used more by: ${lab}`)), el("div", { class: "terms-scroll" }, tb));
+    };
+    grid.append(side(K.A, la, ga), side(K.B, lb, gb));
+    panel.append(grid);
+    const lines = KW[state.word] || [];
+    ex.append(el("h3", { text: `“${state.word}” in context` }), el("div", { class: "kwic" }, ...lines.map(([show, date, title, ctx]) => kwLine(show, groupOfName(D, show), date, title, ctx))),
+      el("p", { class: "note", text: "Rates are per 10,000 words, pooled across each group’s shows, so prolific shows weigh more than in the rest of the dashboard. z is the Fightin’ Words log-odds z-score (Monroe, Colaresi & Quinn 2008). Click a word for three example lines." }));
+    panel.append(ex);
+  }
+
+  function tAbout(panel, D) {
+    const card = el("div", { class: "card prose" }, el("h2", { text: "About the topic model" }),
+      el("p", { text: "A topic model finds groups of words that tend to appear together and treats each group as a topic. Instead of counting a fixed word list, it asks what the shows spend their time talking about. I split every episode into 250-word chunks (1.3 million chunks and 324 million words from the manosphere shows, 2009–2026) and fit non-negative matrix factorization (NMF) at three resolutions. This tab shows the 12 broad themes and 30 finer topics; each finer topic is linked to its most similar broad theme. The 15 comparison shows were scored with the same fitted model, so every show is described with the same topics." }),
+      el("h3", { text: "How it was built" }),
+      el("ul", {}, ...[
+        "Preprocessing: lowercase; drop stop words, spoken fillers, contractions, generic conversational words and intensifier profanity (which marks register, not subject); no stemming.",
+        "Vocabulary, set by the manosphere chunks only: 20,000 words that appear in at least 100 chunks, in at least 5 chunks in each of at least 4 shows, and in no more than 20% of chunks. Chunks with fewer than 15 remaining words (ad breaks, intros) are dropped; TF-IDF weighting.",
+        "Fitting: one pooled model per resolution, fit on up to 20,000 random chunks from each manosphere show, so that Joe Rogan (28% of all chunks) does not define the topics alone. Every chunk of every show, including the 15 comparison shows, was then scored with that fitted model. The 12- and 30-topic models are separate fits, linked afterwards by word similarity.",
+        "A chunk’s topic weights are rescaled to sum to 100%; a show’s share of a topic is the average over its chunks, and a group’s value is the average of its shows. Tests are two-sided Mann–Whitney tests on show shares, as in the lexicon tabs, with Jake Paul excluded.",
+        "Distinctive words use Fightin’ Words: log-odds with an informative Dirichlet prior, on pooled word counts.",
+      ].map((x) => el("li", { text: x }))),
+      el("h3", { text: "Limitations" }),
+      el("ul", {}, ...[
+        "This is preliminary. Labels and the content/format flags are my provisional reading of each topic’s words and passages and still need human validation (e.g., Ying, Montgomery & Stewart 2022).",
+        "“Format” topics (sponsor reads, show segments, sign-offs, Charlie Kirk’s TPUSA promos) capture how a show is produced rather than what it discusses.",
+        "The model was fit on the manosphere shows (the original 20, including Jake Paul), so the comparison shows are described in the manosphere’s terms; subjects that only the control shows discuss are folded into the nearest manosphere topic.",
+        "NMF has no covariates: show, group and year differences are computed afterwards by averaging shares. STM would model them directly but does not scale to 1.3 million documents.",
+        "With 12 or 30 topics and seven comparisons, some significant cells are expected by chance. Earlier tests with an average-episode design find more differences, mostly driven by a few prolific political shows.",
+        "Shows enter the corpus at different times, so yearly averages mix real change with changes in which shows are present.",
+        "Distinctive-word lists pool words across shows, so prolific shows dominate them, and the manosphere side still includes Jake Paul.",
+      ].map((x) => el("li", { text: x }))),
+      el("h3", { text: "Sources" }),
+      el("ul", {}, ...[["Monroe, Colaresi & Quinn (2008), “Fightin’ Words,” Political Analysis 16(4)", "https://www.prio.org/publications/4012"], ["Ying, Montgomery & Stewart (2022), “Topics, Concepts, and Measurement,” Political Analysis 30(4)", "https://doi.org/10.1017/pan.2021.33"], ["scikit-learn NMF documentation", "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html"]].map(([l, u]) => el("li", {}, el("a", { href: u, target: "_blank", rel: "noopener", text: l })))));
+    panel.append(el("div", { class: "controls" }, levelCtl()), card);
+    const c2 = el("div", { class: "card" }, el("h3", { text: D.level === 12 ? "The 12 themes" : "The 30 topics" }));
+    const tb = el("table");
+    tb.append(el("thead", {}, el("tr", {}, el("th", { text: D.level === 12 ? "Theme" : "Topic" }), D.level === 30 ? el("th", { text: "Broad theme" }) : null, el("th", { text: "Top words" }))));
+    tb.append(el("tbody", {}, ...D.measures.map((m) => el("tr", {}, el("td", {}, m.label, fmtTag(m)), D.level === 30 ? el("td", { text: m.parent }) : null, el("td", { class: "words", text: m.words })))));
+    c2.append(el("div", { class: "tbl-wrap" }, tb));
+    panel.append(c2);
+  }
+
+  // ------------------------------------------------------------ 7. About
+  const ABOUT = {
+    listn: {
+      what: "LISTN (Lexicon Induction with Socio-Temporal Nuance) is a data-driven lexicon of manosphere in-group language. Christine de Kock induced it from about 4 million posts in 50 manosphere subreddits (April–December 2018), using dynamic word and user embeddings, and assigned each word a score for five communities: incels, Men Going Their Own Way, the Red Pill, pick-up artists and men’s rights activists. Experts then validated a set of new terms the method found. This dashboard uses those 454 expert-validated terms: the coinages most specific to these communities.",
+      how: "Each term counts once per occurrence in the transcripts; spoken two-word forms (“red pilled”) count as the one-word entry. A term belongs to a community only when its score for that community clearly beats the others; otherwise it is “shared across communities.”",
+      lim: ["Most of these words are typed forum coinages: only 74 of the 454 ever occur in the corpus, so the measure rests on a small set of terms such as “cucks,” “simping,” “incels” and “redpilled.”", "The Red Pill and pick-up-artist communities contribute few new words; their core vocabulary (“redpill,” “bluepill,” “SMV”) sits in the older lexicons LISTN builds on, so those subgroups are nearly empty here.", "A match is a word, not a belief: hosts mocking “incels” count the same as hosts using the term sincerely (see the examples).", "Ratios for communities with near-zero control rates (MGTOW, men’s rights) are imprecise."],
+      links: [["Paper: de Kock (2025), ACL", "https://aclanthology.org/2025.acl-long.650"], ["Code and lexicon on GitHub", "https://github.com/unimelb-nlp/listn"]],
+    },
+    krendel: {
+      what: "The Krendel codebook collects concept terms that corpus linguists identified in five large manosphere subreddits (r/TheRedPill, r/braincels, r/MensRights, r/seduction, r/MGTOW). It captures ideas rather than slang: “red pill,” “body count,” “hypergamy,” “simp.” I use 33 codebook terms, grouped into five themes of my own: red-pill epistemology, female essentialism, outgroup emasculation, sexual marketplace and movement identity.",
+      how: "Terms and phrases match their exact spoken forms. Five terms are excluded because in speech they are mostly everyday words or real names: alpha, beta, sigma, Becky and Stacy.",
+      lim: ["The list is small and hand-picked, and the five themes are my grouping, not the papers’.", "Several terms have everyday senses: “body count” is often a casualty figure and “the matrix” a film. The Radiolab spike in 2023 is one episode about the word “cuck.”", "A match is a word, not a belief; see the examples."],
+      links: [["Krendel, McGlashan & Koller (2022), Corpora", "https://doi.org/10.3366/cor.2022.0257"], ["McGlashan & Krendel (2023), International Journal of Corpus Linguistics", "https://doi.org/10.1075/ijcl.22053.mcg"]],
+    },
+    misogyny: {
+      what: "Farrell et al. (2019) built nine lexicons to measure misogyny across manosphere subreddits: belittling, flipping the narrative, homophobia, hostility, patriarchy, physical violence, racism, sexual violence and stoicism. I use the 1,052 entries flagged as specific, dropping everyday words such as “hit,” “black” and “female.” Sub-lexicons overlap, so a few terms belong to two.",
+      how: "Entries match exact word forms with no stemming, as in the original paper; multi-word entries match the exact sequence.",
+      lim: ["Hostility is dominated by profane insults, so the measure partly tracks comedic register: the highest rates belong to comedy shows inside and outside the manosphere.", "Physical violence includes news words (“murder,” “assault”), which is why the political benchmark scores high on it.", "YouTube captions censor slurs and profanity as “[ __ ]” for some shows (Adin Ross, Bussin’ With The Boys, Impaulsive and about half of Fresh & Fit), so their counts are too low.", "“Stoicism” is mostly incel jargon (“cuck,” “hypergamy,” “incel”), which is why it behaves like the manosphere lexicons."],
+      links: [["Paper: Farrell et al. (2019), WebSci ’19", "https://doi.org/10.1145/3292522.3326045"], ["Lexicon on GitHub", "https://github.com/miriamfs/WebSci2019"]],
+    },
+  };
+  function about(panel, D) {
+    const A = ABOUT[state.lex];
+    const card = el("div", { class: "card prose" }, el("h2", { text: D.name }), el("p", { text: A.what }), el("h3", { text: "How matches are counted" }), el("p", { text: A.how }),
+      el("h3", { text: "Limitations" }), el("ul", {}, ...A.lim.map((l) => el("li", { text: l }))),
+      el("h3", { text: "Sources" }), el("ul", {}, ...A.links.map(([l, u]) => el("li", {}, el("a", { href: u, target: "_blank", rel: "noopener", text: l })))));
+    panel.append(card);
+    const c2 = el("div", { class: "card" }, el("h3", { text: D.contents_title }));
+    const tb = el("table");
+    tb.append(el("thead", {}, el("tr", {}, el("th", { text: D.sublabel[0].toUpperCase() + D.sublabel.slice(1) }), el("th", { class: "n", text: "Terms" }), el("th", { text: "Examples" }))));
+    tb.append(el("tbody", {}, ...D.contents.map((r) => el("tr", {}, el("td", { text: r.sub }), el("td", { class: "n", text: r.n }), el("td", { text: r.examples })))));
+    c2.append(el("div", { class: "tbl-wrap" }, tb), el("p", { class: "note", text: state.lex === "krendel" ? "The Krendel list is complete." : "Examples are among the most frequent terms in the 19 manosphere shows." }));
+    panel.append(c2);
+  }
+
+  // ------------------------------------------------------------ boot
+  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (state.sub !== "terms") render(); }, 250); });
+  fromHash();
+  render().catch((e) => { $("#panel").replaceChildren(el("p", { class: "warn", text: "The data could not load. Reload the page; if this persists, the data files are missing." })); console.error(e); });
+})();
+</script>
+</body>
+</html>
